@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1050184524972",
+    "firebase_url": "https://digi-talt-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "digi-talt",
+    "storage_bucket": "digi-talt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050184524972:android:e56e6251abf056dc836b09",
+        "android_client_info": {
+          "package_name": "com.example.digitalt_mobileapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050184524972-tptd28phkqmts31jufcr1r33d221dnvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWYdE1NumFN9OR3g2tU4q29TrQGAs5X-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050184524972-tptd28phkqmts31jufcr1r33d221dnvr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1050184524972-qu1bgb7465uoo64m5qjg8kjnhel800uj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.digitaltApplication"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
