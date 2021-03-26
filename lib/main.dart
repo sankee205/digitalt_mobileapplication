@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamProvider<BaseUser>.value(
         value: AuthService().user,
+        initialData: null,
         child: MaterialApp(
           home: Wrapper(),
           debugShowCheckedModeBanner: false,
