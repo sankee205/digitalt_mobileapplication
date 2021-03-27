@@ -9,7 +9,7 @@ class BaseTextFields extends StatefulWidget {
   final int index;
   final int maxlines;
   final String hintText;
-  final List<String> list;
+  final List list;
 
   const BaseTextFields(this.list, this.index, this.maxlines, this.hintText);
 

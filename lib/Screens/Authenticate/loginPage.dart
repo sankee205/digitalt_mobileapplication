@@ -1,11 +1,7 @@
 import 'package:digitalt_application/Pages/VippsLoginPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:digitalt_application/Services/auth.dart';
-import 'package:digitalt_application/Screens/Authenticate/authenticate.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function toggleView;
