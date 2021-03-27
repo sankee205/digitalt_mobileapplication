@@ -42,23 +42,17 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => CasePage(
-                            image:
-                            caseObject['image'],
-                            title:
-                            caseObject['title'],
-                            author: caseObject[
-                            'author'],
-                            publishedDate:
-                            caseObject[
-                            'publishedDate'],
-                            introduction:
-                            caseObject[
-                            'introduction'],
-                            text: caseObject[
-                            'text']
+                              image: caseObject['image'],
+                              title: caseObject['title'],
+                              author: caseObject['author'],
+                              publishedDate: caseObject['publishedDate'],
+                              introduction: caseObject['introduction'],
+                              text: caseObject['text'],
+                              lastEdited: caseObject['lastEdited'],
                             )));
               },
-              child: BaseCaseBox(image: caseObject['image'],title: caseObject['title']));
+              child: BaseCaseBox(
+                  image: caseObject['image'], title: caseObject['title']));
         });
       }).toList(),
     );

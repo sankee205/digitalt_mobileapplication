@@ -10,7 +10,8 @@ class BaseCaseBox extends StatefulWidget {
   final String image;
   final String title;
 
-  const BaseCaseBox({Key key, @required this.image, @required this.title}) : super(key: key);
+  const BaseCaseBox({Key key, @required this.image, @required this.title})
+      : super(key: key);
 
   @override
   _BaseCaseBoxState createState() => _BaseCaseBoxState();
@@ -25,7 +26,7 @@ class _BaseCaseBoxState extends State<BaseCaseBox> {
           decoration:
               BoxDecoration(borderRadius: BorderRadius.circular(0), boxShadow: [
             BoxShadow(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.grey.withOpacity(0.8),
                 blurRadius: 0,
                 offset: Offset(0, 3),
                 spreadRadius: 5)
@@ -36,7 +37,7 @@ class _BaseCaseBoxState extends State<BaseCaseBox> {
               widget.title,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  //color: Colors.black,
                   fontSize: 15),
             ),
           ),
@@ -44,16 +45,17 @@ class _BaseCaseBoxState extends State<BaseCaseBox> {
         //this is the Image of the CaseBox
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(0),
-              image: DecorationImage(
-                  image: NetworkImage(widget.image), fit: BoxFit.cover),
-              boxShadow: [
+            borderRadius: BorderRadius.circular(0),
+            image: DecorationImage(
+                image: NetworkImage(widget.image), fit: BoxFit.cover),
+            /**boxShadow: [
                 BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
+                    //color: Colors.grey.withOpacity(0.5),
                     blurRadius: 7,
                     offset: Offset(0, 3),
                     spreadRadius: 5)
-              ]),
+              ]*/
+          ),
         ));
   }
 }

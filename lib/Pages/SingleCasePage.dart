@@ -20,8 +20,11 @@ class CasePage extends StatelessWidget {
   final String title;
   final List author;
   final String publishedDate;
+  final String lastEdited;
   final String introduction;
-  final String text;
+  final List text;
+
+  Text _lastEditedText;
 
   CasePage(
       {Key key,
@@ -30,15 +33,22 @@ class CasePage extends StatelessWidget {
       @required this.author,
       @required this.publishedDate,
       @required this.introduction,
-      @required this.text})
+      @required this.text,
+      this.lastEdited})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (lastEdited != null) {
+      _lastEditedText = Text('Sist edret: ' + lastEdited);
+    }
     return Scaffold(
       //this is the appbar for the home page
       appBar: BaseAppBar(
-        title: Text('DIGI-TALT'),
+        title: Text(
+          'DIGI-TALT',
+          style: TextStyle(color: Colors.white),
+        ),
         appBar: AppBar(),
         widgets: <Widget>[Icon(Icons.more_vert)],
       ),
@@ -47,7 +57,6 @@ class CasePage extends StatelessWidget {
       drawer: BaseAppDrawer(),
 
       floatingActionButton: FloatingActionButton(
-
         child: Icon(
           Icons.arrow_back,
           color: Colors.white,
@@ -60,115 +69,136 @@ class CasePage extends StatelessWidget {
       //here starts the body
       body: Center(
         child: Container(
-            width: 1200,
-            alignment: Alignment.topCenter,
-            //this is the backgound image of the case
+          width: 1200,
+          alignment: Alignment.topCenter,
+          //this is the backgound image of the case
 
-            //here starts the case
-            child: Container(
-              width: 800,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(image),
-                  fit: BoxFit.fitWidth,
-                  alignment: FractionalOffset.topCenter,
-                ),
+          //here starts the case
+          child: Container(
+            width: 800,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(image),
+                fit: BoxFit.fitWidth,
+                alignment: FractionalOffset.topCenter,
               ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          0.0,
-                          max(MediaQuery.of(context).size.width * 0.225, 225),
-                          0.0,
-                          0.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Material(
-                          borderRadius: BorderRadius.circular(35),
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              //this is the title
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                child: Text(
-                                  title,
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+            ),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                        0.0,
+                        max(MediaQuery.of(context).size.width * 0.225, 225),
+                        0.0,
+                        0.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(35),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 10,
+                            ),
+                            //this is the title
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: Text(
+                                title,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
 
-                              SizedBox(
-                                height: 20,
+                            SizedBox(
+                              height: 10,
+                            ),
+                            //in this row you find author and published date
+                            Row(
+                              children: [
+                                Icon(Icons.person),
+                                Container(
+                                  margin: EdgeInsets.all(10),
+                                  width: 170,
+                                  child: ResponsiveGridRow(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: author.map((author) {
+                                      return ResponsiveGridCol(
+                                          xl: 12,
+                                          md: 12,
+                                          xs: 12,
+                                          child: Container(
+                                            child: Text(
+                                              author,
+                                              style: TextStyle(fontSize: 10),
+                                            ),
+                                          ));
+                                    }).toList(),
+                                  ),
+                                ),
+                                Icon(Icons.date_range),
+                                Text(publishedDate)
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+
+                            Container(
+                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: Text(
+                                introduction,
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              //in this row you find author and published date
-                              Row(
-                                children: [
-                                  Icon(Icons.person),
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    width: 150,
-                                    child: ResponsiveGridRow(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: author.map((author) {
-                                        return ResponsiveGridCol(
-                                            xl: 12,
-                                            md: 12,
-                                            xs: 12,
-                                            child: Container(
-                                              child: Text(
-                                                author,
-                                                style: TextStyle(fontSize: 10),
-                                              ),
-                                            ));
-                                      }).toList(),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            //this is the description of the case. the main text
+                            //this is the description of the case. the main text
+                            Container(
+                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              width: 600,
+                              child: Column(
+                                children: text.map((item) {
+                                  return Container(
+                                    margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      item,
+                                      style: TextStyle(fontSize: 20),
                                     ),
-                                  ),
-
-                                  Icon(Icons.date_range),
-                                  Text(publishedDate)
-                                ],
+                                  );
+                                }).toList(),
                               ),
-
-                              Container(
-                                margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                child: Text(
-                                  introduction,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              //this is the description of the case. the main text
-                              Container(
-                                margin: EdgeInsets.fromLTRB(50, 0, 50, 0),
-                                child: EasyRichText(text, defaultStyle: TextStyle(color: Colors.black,fontSize: 20.0,
-                                    height: 1),),
-                              ),
-                              SizedBox(
-                                height: 50,
-                              )
-                            ],
-                          ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Center(
+                              child: _lastEditedText == null
+                                  ? Text(
+                                      'Denne artikkelen har aldri blitt endret')
+                                  : _lastEditedText,
+                            ),
+                            SizedBox(
+                              height: 50,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+          ),
         ),
       ),
     );

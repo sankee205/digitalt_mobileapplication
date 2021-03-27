@@ -17,7 +17,7 @@ class CaseItem {
   final List author;
   final String publishedDate;
   final String introduction;
-  final String text;
+  final List text;
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,6 +28,16 @@ class CaseItem {
       'introduction': introduction,
       'text': text,
     };
+  }
+
+  dynamic fromMap(Map<String, dynamic> caseItem) {
+    return CaseItem(
+        image: caseItem['image'],
+        title: caseItem['title'],
+        author: caseItem['author'],
+        publishedDate: caseItem['publishedDate'],
+        introduction: caseItem['introduction'],
+        text: caseItem['text']);
   }
 
   CaseItem(

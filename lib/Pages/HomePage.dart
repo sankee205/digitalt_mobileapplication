@@ -33,7 +33,7 @@ class HomePageState extends State<HomePage> {
   final AuthService _auth = AuthService();
   final DatabaseService db = DatabaseService();
   List newCases = [];
-  List allCases =[];
+  List allCases = [];
   List popularCases = [];
 
   @override
@@ -54,20 +54,23 @@ class HomePageState extends State<HomePage> {
       print('unable to get data');
     } else {
       setState(() {
-        switch(folder) {
-          case 'PopularCases': {
-            popularCases = resultant;
-          }
-          break;
+        switch (folder) {
+          case 'PopularCases':
+            {
+              popularCases = resultant;
+            }
+            break;
 
-          case 'NewCases': {
-            newCases = resultant;
-          }
-          break;
-          case 'AllCases': {
-            allCases = resultant;
-          }
-          break;
+          case 'NewCases':
+            {
+              newCases = resultant;
+            }
+            break;
+          case 'AllCases':
+            {
+              allCases = resultant;
+            }
+            break;
         }
       });
     }
@@ -79,7 +82,10 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       //this is the appbar for the home page
       appBar: BaseAppBar(
-        title: Text('DIGI-TALT'),
+        title: Text(
+          'DIGI-TALT',
+          style: TextStyle(color: Colors.white),
+        ),
         appBar: AppBar(),
         widgets: <Widget>[Icon(Icons.more_vert)],
       ),
@@ -92,161 +98,154 @@ class HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
           child: Center(
         child: Container(
-          width: 800,
-          color: Colors.grey.shade300,
-          child: Column(
-            children: [
-              ResponsiveGridRow(
+            width: 800,
+            child: Material(
+              child: Column(
                 children: [
-                  ResponsiveGridCol(
-                    lg: 8,
-                    xs: 12,
-                    child: Container(
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(color: Colors.white),
-                            height: 320,
-                            child: ListView(
-                              children: <Widget>[
-                                //should we add a play and stop button?
-                                BaseCarouselSlider(
-                                    allCases)
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  ResponsiveGridCol(
-                    lg: 4,
-                    xs: 12,
-                    child: Container(
-                      height: 325,
-                      width: 400,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: Text(
-                                'Siste Nytt',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 25,
-                                  decoration: TextDecoration.underline,
+                  ResponsiveGridRow(
+                    children: [
+                      ResponsiveGridCol(
+                        lg: 8,
+                        xs: 12,
+                        child: Container(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(5),
+                                height: 320,
+                                child: ListView(
+                                  children: <Widget>[
+                                    //should we add a play and stop button?
+                                    BaseCarouselSlider(allCases)
+                                  ],
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Column(
-                              children: allCases.map((caseObject) {
-                                return Builder(builder: (
-                                  BuildContext context,
-                                ) {
-                                  //makes the onclick available
-                                  return GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CasePage(
-                                                        image:
-                                                            caseObject['image'],
-                                                        title:
-                                                            caseObject['title'],
-                                                        author: caseObject[
-                                                            'author'],
-                                                        publishedDate:
-                                                            caseObject[
-                                                                'publishedDate'],
-                                                        introduction:
-                                                            caseObject[
-                                                                'introduction'],
-                                                        text: caseObject[
-                                                            'text'])));
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: 500,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.2),
-                                                  blurRadius: 7,
-                                                  offset: Offset(0, 3),
-                                                  spreadRadius: 5)
-                                            ]),
-                                        margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          caseObject['title'],
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontStyle: FontStyle.normal),
-                                        ),
-                                      ));
-                                });
-                              }).toList(),
-                            ),
-                          ]),
-                    ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      ResponsiveGridCol(
+                        lg: 4,
+                        xs: 12,
+                        child: Container(
+                          width: 400,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    'Siste Nytt',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Column(
+                                  children: allCases.map((caseObject) {
+                                    return Builder(builder: (
+                                      BuildContext context,
+                                    ) {
+                                      //makes the onclick available
+                                      return GestureDetector(
+                                          onTap: () {
+                                            print(caseObject['id']);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) {
+                                                  return CasePage(
+                                                      image:
+                                                          caseObject['image'],
+                                                      title:
+                                                          caseObject['title'],
+                                                      author:
+                                                          caseObject['author'],
+                                                      publishedDate: caseObject[
+                                                          'publishedDate'],
+                                                      introduction: caseObject[
+                                                          'introduction'],
+                                                      text: caseObject['text'],
+                                                      lastEdited: caseObject[
+                                                          'lastEdited']);
+                                                },
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                              //height: 40,
+                                              width: 500,
+                                              padding: EdgeInsets.all(2),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  border: Border.all(
+                                                      color: Colors
+                                                          .grey.shade600)),
+                                              margin: EdgeInsets.fromLTRB(
+                                                  5, 3, 5, 3),
+                                              alignment: Alignment.topLeft,
+                                              child: Center(
+                                                child: Text(
+                                                  caseObject['title'],
+                                                  style: TextStyle(
+                                                      fontStyle:
+                                                          FontStyle.normal),
+                                                ),
+                                              )));
+                                    });
+                                  }).toList(),
+                                ),
+                              ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ResponsiveGridRow(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: allCases.map((caseObject) {
+                      return ResponsiveGridCol(
+                          lg: 4,
+                          md: 6,
+                          xs: 12,
+                          child: Container(
+                              margin: EdgeInsets.all(5),
+                              height: 250,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => CasePage(
+                                                  image: caseObject['image'],
+                                                  title: caseObject['title'],
+                                                  author: caseObject['author'],
+                                                  publishedDate: caseObject[
+                                                      'publishedDate'],
+                                                  introduction: caseObject[
+                                                      'introduction'],
+                                                  text: caseObject['text'],
+                                                  lastEdited:
+                                                      caseObject['lastEdited'],
+                                                )));
+                                  },
+                                  child: BaseCaseBox(
+                                      image: caseObject['image'],
+                                      title: caseObject['title']))));
+                    }).toList(),
                   ),
                 ],
               ),
-              ResponsiveGridRow(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: allCases.map((caseObject) {
-                  return ResponsiveGridCol(
-                      lg: 4,
-                      md: 6,
-                      xs: 12,
-                      child: Container(
-                          margin: EdgeInsets.all(5),
-                          height: 250,
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>  CasePage(
-                                            image:
-                                            caseObject['image'],
-                                            title:
-                                            caseObject['title'],
-                                            author: caseObject[
-                                            'author'],
-                                            publishedDate:
-                                            caseObject[
-                                            'publishedDate'],
-                                            introduction:
-                                            caseObject[
-                                            'introduction'],
-                                            text: caseObject[
-                                            'text'])));
-                              },
-                              child: BaseCaseBox(image: caseObject['image'], title: caseObject['title']))));
-                }).toList(),
-              ),
-            ],
-          ),
-        ),
+            )),
       )),
     );
   }

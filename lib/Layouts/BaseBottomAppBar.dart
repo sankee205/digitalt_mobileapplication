@@ -28,7 +28,7 @@ class BaseBottomAppBar extends StatelessWidget implements PreferredSizeWidget {
           label: 'School',
         ),
       ],
-      selectedItemColor: Colors.red,
+      //selectedItemColor: Colors.red,
     );
   }
 
