@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-/**
- * this is a base textfield object. it is used to create textfields in the addcase form.
- * it takes in parameters to determined the length of the textfield for different type of use.
- * it is used for both long paragraphs and short sentences. 
- */
+///
+///this is a base textfield object. it is used to create textfields in the addcase form.
+///it takes in parameters to determined the length of the textfield for different type of use.
+///it is used for both long paragraphs and short sentences.
 class BaseTextFields extends StatefulWidget {
   final int index;
   final int maxlines;
