@@ -7,6 +7,7 @@ import 'package:digitalt_application/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// this page will display the user profile
 class SubscriptionPage extends StatefulWidget {
@@ -18,7 +19,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   final AuthService _auth = AuthService();
   final VippsApi _vippsApi = VippsApi();
   BaseUser _currentUser;
-  String _accessToken;
 
   @override
   void initState() {
@@ -30,10 +30,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   _getAccessToken() async {
     var token = await _vippsApi.getAccessToken();
     if (token != null) {
-      print('initialisng _accesstoken');
-      setState(() {
-        _accessToken = token;
-      });
+      print('_accesstoken recieved');
     }
   }
 
@@ -154,11 +151,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                     ),
                                   )),
                               onTap: () async {
-                                if (_accessToken != null) {
-                                  var url = _vippsApi.initiatePayment(
-                                      '93249909', _accessToken);
-                                  print('url: ' + url.toString());
-                                }
+                                await _vippsApi
+                                    .initiatePayment('93249909')
+                                    .then((value) async {
+                                  await launch(value);
+                                });
                               },
                             ),
                           ),
