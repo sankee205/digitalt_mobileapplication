@@ -84,7 +84,6 @@ class _InfoPageState extends State<InfoPage> {
         //creates the menu in the appbar(drawer)
         drawer: BaseAppDrawer(),
         body: Container(
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
           decoration: BoxDecoration(
             image: DecorationImage(
                 image: NetworkImage(widget.backgroundPhoto), fit: BoxFit.cover),

@@ -60,6 +60,7 @@
 <array>
   <string>https</string>
   <string>http</string>
+  <string>vipps</string> /
 </array>
 
 </dict>

@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:digitalt_application/Layouts/BaseAppBar.dart';
 import 'package:digitalt_application/Layouts/BaseAppDrawer.dart';
 import 'package:digitalt_application/Layouts/BaseBottomAppBar.dart';
 import 'package:digitalt_application/Services/VippsApi.dart';
 import 'package:digitalt_application/Services/auth.dart';
 import 'package:digitalt_application/models/user.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -19,12 +23,24 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   final AuthService _auth = AuthService();
   final VippsApi _vippsApi = VippsApi();
   BaseUser _currentUser;
+  bool _isAppInstalled = false;
 
   @override
   void initState() {
     super.initState();
     _setBaseUser();
     _getAccessToken();
+    _appInstalled();
+  }
+
+  _appInstalled() async {
+    /*bool value = await LaunchApp.isAppInstalled(
+        androidPackageName: 'vipps', iosUrlScheme: 'vipps://');
+    if (value != null) {
+      setState(() {
+        _isAppInstalled = value;
+      });
+    }*/
   }
 
   _getAccessToken() async {
@@ -53,6 +69,30 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       await _auth.signOut();
     } catch (e) {
       print(e);
+    }
+  }
+
+  _initiateVipps() async {
+    if (_isAppInstalled) {
+      await _vippsApi.initiatePayment('93249909').then((value) async {
+        await LaunchApp.openApp(
+            androidPackageName: 'vipps.   vipps',
+            iosUrlScheme: 'vipps://',
+            openStore: false);
+      });
+    } else {
+      await _vippsApi.initiatePayment('93249909').then((value) async {
+        await launch(value);
+        await _vippsApi.getPaymentDetails();
+        sleep(const Duration(seconds: 5));
+        String responsecode;
+        while (responsecode != '200') {
+          await _vippsApi.capturePayment().then((value) {
+            responsecode = value;
+          });
+        }
+        await closeWebView();
+      });
     }
   }
 
@@ -150,12 +190,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       ],
                                     ),
                                   )),
-                              onTap: () async {
-                                await _vippsApi
-                                    .initiatePayment('93249909')
-                                    .then((value) async {
-                                  await launch(value);
-                                });
+                              onTap: () {
+                                _initiateVipps();
                               },
                             ),
                           ),
@@ -195,7 +231,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                           height: 200,
                                           child: Center(
                                             child: Text(
-                                                'Prøve abonnement, 1 måned'),
+                                                'Prøve abonnement: 1 måned'),
                                           ),
                                         ),
                                         SizedBox(
