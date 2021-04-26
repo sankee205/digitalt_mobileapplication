@@ -141,16 +141,19 @@ class _BaseAppDrawerState extends State<BaseAppDrawer> {
                   MaterialPageRoute(builder: (context) => SettingsPage()));
             },
           ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Abonnement'),
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SubscriptionPage(_currentUser)));
-            },
-          ),
+          _auth.isUserAnonymous()
+              ? SizedBox()
+              : ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text('Abonnement'),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                SubscriptionPage(_currentUser)));
+                  },
+                ),
           _auth.isUserAnonymous()
               ? ListTile(
                   leading: Icon(Icons.login),
