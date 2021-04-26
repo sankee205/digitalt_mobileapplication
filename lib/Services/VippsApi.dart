@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
@@ -58,7 +57,7 @@ class VippsApi {
       "transaction": {
         "orderId":
             "acme-shop-" + randomNumber + "-order" + randomNumber + "abc",
-        "amount": '20000',
+        "amount": '105000',
         "transactionText": "One year subscription"
       }
     };
@@ -102,7 +101,7 @@ class VippsApi {
     Map requestBody = {
       "merchantInfo": {"merchantSerialNumber": _merchantSerialNumber},
       "transaction": {
-        "amount": "200",
+        "amount": "105000",
         "transactionText": "One year subscription"
       }
     };
@@ -117,7 +116,7 @@ class VippsApi {
         },
         body: json.encode(requestBody));
     if (response.statusCode == 200) {
-      final body = json.decode(response.body).toString();
+      final body = response.body.toString();
       return body;
     } else {
       return response.statusCode.toString();

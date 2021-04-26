@@ -1,3 +1,5 @@
+import 'package:digitalt_application/models/subscription.dart';
+
 ///
 ///this is a base user for this project
 class BaseUser {
@@ -7,14 +9,17 @@ class BaseUser {
   final String phonenumber;
   final String userRole;
   final List myCases;
+  final Subscription mySubscription;
 
-  BaseUser(
-      {this.uid,
-      this.fullName,
-      this.email,
-      this.phonenumber,
-      this.userRole,
-      this.myCases});
+  BaseUser({
+    this.uid,
+    this.fullName,
+    this.email,
+    this.phonenumber,
+    this.userRole,
+    this.myCases,
+    this.mySubscription,
+  });
 
   BaseUser.fromData(Map<String, dynamic> data)
       : uid = data['uid'],
@@ -22,7 +27,8 @@ class BaseUser {
         email = data['email'],
         phonenumber = data['phonenumber'],
         userRole = data['userRole'],
-        myCases = data['myCases'];
+        myCases = data['myCases'],
+        mySubscription = Subscription.fromData(data['mySubscription']);
 
   Map<String, dynamic> toJson() {
     return {
@@ -32,6 +38,7 @@ class BaseUser {
       'phonenumber': phonenumber,
       'userRole': userRole,
       'myCases': myCases,
+      'mySubscription': mySubscription.toJson(),
     };
   }
 }

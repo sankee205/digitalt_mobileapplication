@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digitalt_application/models/subscription.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 /// this is the dabate service. it handles data
@@ -218,5 +219,12 @@ class DatabaseService {
         .ref('images')
         .child(fileName)
         .getDownloadURL();
+  }
+
+  //------------------------------Subscription Methods--------------------------
+  Future updateSubscriptionData(String id, Subscription mySubscription) async {
+    return await _userCollection.doc(id).update({
+      'mySubscription': mySubscription.toJson(),
+    });
   }
 }

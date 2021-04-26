@@ -1,40 +1,50 @@
 import 'package:digitalt_application/Layouts/BaseAppBar.dart';
 import 'package:digitalt_application/Layouts/BaseAppDrawer.dart';
 import 'package:digitalt_application/Layouts/BaseBottomAppBar.dart';
-import 'package:digitalt_application/LoginRegister/Views/loginView.dart';
-import 'package:digitalt_application/Pages/EditProfilePage.dart';
+import 'package:digitalt_application/Services/DataBaseService.dart';
 import 'package:digitalt_application/Services/auth.dart';
+import 'package:digitalt_application/models/subscription.dart';
 import 'package:digitalt_application/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 /// this page will display the user profile
 class DisplayVippsOrder extends StatefulWidget {
+  final dynamic jsonDetailString;
+  final String uid;
+
+  const DisplayVippsOrder(this.jsonDetailString, this.uid);
   @override
   _DisplayVippsOrderState createState() => _DisplayVippsOrderState();
 }
 
 class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
   final AuthService _auth = AuthService();
-  BaseUser _currentUser;
-
+  final DatabaseService _databaseService = DatabaseService();
+  String _amount;
+  String _transactionId;
   @override
   void initState() {
     super.initState();
-    _setBaseUser();
+    _setOrderDetails();
   }
 
-  _setBaseUser() async {
-    if (!_auth.isUserAnonymous()) {
-      var user = await _auth.getFirebaseUser();
-      if (user != null) {
-        setState(() {
-          _currentUser = user;
-        });
-      } else {
-        print('Base user is null');
-      }
-    }
+  _setOrderDetails() async {
+    final responseArray = json.decode(widget.jsonDetailString);
+    final transactionInfo = responseArray['transactionInfo'];
+    Subscription mySubscription = Subscription(
+        freeMonthUsed: false,
+        orderId: responseArray['orderId'],
+        status: 'active',
+        amount: transactionInfo['amount'].toString(),
+        timeStamp: transactionInfo['timeStamp'],
+        transactionText: transactionInfo['transactionText']);
+    await _databaseService.updateSubscriptionData(widget.uid, mySubscription);
+    setState(() {
+      _amount = transactionInfo['amount'].toString();
+      _transactionId = transactionInfo['transactionId'].toString();
+    });
   }
 
   _signOut() async {
@@ -81,187 +91,31 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
             child: Container(
                 width: 400,
                 child: Material(
-                  child: _auth.isUserAnonymous()
-                      ? Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                  ),
-                                  Text('Logg inn for å lese flere saker'),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                _signOut();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginView()));
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text('Logg inn'),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            )
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Din Profildata',
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Icon(
-                              Icons.person,
-                              size: 50,
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  'Navn: ',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                _currentUser == null
-                                    ? Text('')
-                                    : Text(
-                                        _currentUser.fullName,
-                                        style: TextStyle(fontSize: 15),
-                                      )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  'Email: ',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                _currentUser == null
-                                    ? Text('')
-                                    : Text(
-                                        _currentUser.email,
-                                        style: TextStyle(fontSize: 15),
-                                      )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  'Mobilnummer: ',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                _currentUser == null
-                                    ? Text('')
-                                    : Text(
-                                        _currentUser.phonenumber,
-                                        style: TextStyle(fontSize: 15),
-                                      )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  'Brukertype: ',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                _currentUser == null
-                                    ? Text('')
-                                    : Text(
-                                        _currentUser.userRole,
-                                        style: TextStyle(fontSize: 15),
-                                      )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditProfilePage(
-                                        email: _currentUser.email,
-                                        name: _currentUser.fullName,
-                                        phonenumber: _currentUser.phonenumber,
-                                        uid: _currentUser.uid,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Rediger'),
-                                )),
-                            SizedBox(
-                              height: 30,
-                            ),
-                          ],
-                        ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Takk for Handelen!',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text('Kr. ' + _amount),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text('Transaksjonsnummer:  ' + _transactionId),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  ),
                 )),
           ),
         ),

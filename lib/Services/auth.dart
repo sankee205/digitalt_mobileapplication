@@ -1,4 +1,5 @@
 import 'package:digitalt_application/LoginRegister/locator.dart';
+import 'package:digitalt_application/models/subscription.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:digitalt_application/models/user.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,14 @@ class AuthService {
           fullName: fullName,
           phonenumber: phonenumber,
           userRole: role,
-          myCases: []);
+          myCases: [],
+          mySubscription: Subscription(
+              amount: '',
+              freeMonthUsed: false,
+              orderId: '',
+              status: 'nonActive',
+              timeStamp: '',
+              transactionText: ''));
 
       await _firestoreService.createUser(_currentUser);
 
