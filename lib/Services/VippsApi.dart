@@ -95,28 +95,17 @@ class VippsApi {
       Uri.https(_base_url, "/ecomm/v2/payments/$_orderId/details"),
       headers: standardHeaders,
     );
-    final body = json.decode(response.body);
-    switch (response.statusCode) {
-      case 200:
-        {
-          return body;
-        }
-        break;
-    }
-
-    return null;
+    return response.statusCode.toString();
   }
 
-  Future<String> capturePayment() async {
-    sleep(const Duration(seconds: 2));
+  Future capturePayment() async {
     Map requestBody = {
       "merchantInfo": {"merchantSerialNumber": _merchantSerialNumber},
       "transaction": {
-        "amount": "20000",
+        "amount": "200",
         "transactionText": "One year subscription"
       }
     };
-
     http.Response response = await http.post(
         Uri.https(_base_url, "/ecomm/v2/payments/$_orderId/capture"),
         headers: <String, String>{
@@ -127,11 +116,12 @@ class VippsApi {
           'Merchant-Serial-Number': _merchantSerialNumber
         },
         body: json.encode(requestBody));
-    print(response.statusCode);
     if (response.statusCode == 200) {
-      print(jsonDecode(response.body));
+      final body = json.decode(response.body).toString();
+      return body;
+    } else {
+      return response.statusCode.toString();
     }
-    return response.statusCode.toString();
   }
 
   Future cancelPayment() async {}

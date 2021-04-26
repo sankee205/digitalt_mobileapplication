@@ -82,18 +82,52 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       });
     } else {
       await _vippsApi.initiatePayment('93249909').then((value) async {
-        await launch(value);
+        await _webLaunch(true, value);
         await _vippsApi.getPaymentDetails();
-        sleep(const Duration(seconds: 5));
-        String responsecode;
-        while (responsecode != '200') {
-          await _vippsApi.capturePayment().then((value) {
-            responsecode = value;
-          });
-        }
-        await closeWebView();
       });
+      sleep(const Duration(seconds: 5));
+      _capturePayment();
     }
+  }
+
+  _webLaunch(bool state, String url) async {
+    switch (state) {
+      case true:
+        print('opening web view');
+        await launch(url);
+        break;
+      case false:
+        print('closing web view');
+        await closeWebView();
+        break;
+      default:
+    }
+  }
+
+  _capturePayment() async {
+    dynamic response = await _vippsApi.capturePayment();
+    print(response);
+    if (response.contains('status')) {
+      print('contains status');
+    }
+
+    switch (response) {
+      case '404':
+        sleep(const Duration(seconds: 3));
+        _capturePayment();
+        break;
+      case '402':
+        sleep(const Duration(seconds: 3));
+        _capturePayment();
+        break;
+      case '429':
+        sleep(const Duration(seconds: 4));
+        _capturePayment();
+        break;
+      default:
+    }
+
+    //_webLaunch(false, null);
   }
 
   @override
