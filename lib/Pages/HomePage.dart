@@ -116,35 +116,6 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  _setSearchBarList() {
-    switch (_currentUserRole) {
-      case 'Admin':
-        setState(() {
-          _searchCaseList = _allCaseList;
-        });
-        break;
-      case 'Subscriber':
-        setState(() {
-          _searchCaseList = _allCaseList;
-        });
-        break;
-      case 'User':
-        setState(() {
-          _searchCaseList = _guestList;
-        });
-        break;
-      case 'Guest':
-        setState(() {
-          _searchCaseList = _guestList;
-        });
-        break;
-      default:
-        setState(() {
-          _searchCaseList = _guestList;
-        });
-    }
-  }
-
   _fetchDataBaseList(String folder) async {
     dynamic resultant = await _db.getCaseItems(folder);
 
@@ -177,7 +148,6 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     _createStringList();
-    _setSearchBarList();
     //returns a material design
     return Scaffold(
       //this is the appbar for the home page
@@ -576,8 +546,11 @@ class HomePageState extends State<HomePage> {
                                     }
                                   },
                                   child: BaseCaseBox(
-                                      image: caseObject['image'],
-                                      title: caseObject['title']))));
+                                    image: caseObject['image'],
+                                    title: caseObject['title'],
+                                    guestCaseItem: _guestList
+                                        .contains(caseObject['title']),
+                                  ))));
                     }).toList(),
                   ),
                   SizedBox(

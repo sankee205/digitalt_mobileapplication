@@ -24,8 +24,7 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
   String _currentUserRole;
   final AuthService _authService = AuthService();
   final DatabaseService _db = DatabaseService();
-
-  List<String> guestList = [];
+  List<String> _guestList = [];
 
   _getUserRole() async {
     dynamic firebaseUserRole = await _authService.getUserRole();
@@ -45,7 +44,7 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
         firebaseList.add(object['Title'].toString());
       }
       setState(() {
-        guestList = firebaseList;
+        _guestList = firebaseList;
       });
     } else {
       print('resultant is null');
@@ -100,7 +99,7 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
                     break;
                   case 'User':
                     {
-                      if (guestList.contains(caseObject['title'])) {
+                      if (_guestList.contains(caseObject['title'])) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -137,7 +136,7 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
                     break;
                   case 'Guest':
                     {
-                      if (guestList.contains(caseObject['title'])) {
+                      if (_guestList.contains(caseObject['title'])) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -158,7 +157,10 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
                 }
               },
               child: BaseCaseBox(
-                  image: caseObject['image'], title: caseObject['title']));
+                image: caseObject['image'],
+                title: caseObject['title'],
+                guestCaseItem: _guestList.contains(caseObject['title']),
+              ));
         });
       }).toList(),
     );

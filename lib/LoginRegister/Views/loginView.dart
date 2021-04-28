@@ -119,18 +119,7 @@ class _LoginViewState extends State<LoginView> {
                               Text('Logg inn', style: TextStyle(fontSize: 16)),
                           textColor: Colors.white,
                         ),
-                        SizedBox(height: 20),
-                        /*MaterialButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => VippsLoginPage()));
-                            },
-                            child: Image.asset(
-                              'vipps/login_image.png',
-                              width: 200,
-                            )),*/
+                        SizedBox(height: 10),
                         verticalSpaceSmall,
                         MaterialButton(
                           child: Text('Fortsett som gjest'),

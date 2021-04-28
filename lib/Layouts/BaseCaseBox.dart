@@ -7,10 +7,15 @@ import 'package:provider/provider.dart';
 ///before entering the whole case
 class BaseCaseBox extends StatefulWidget {
   //takes in the object caseITem and builds the box from image and title
+  final bool guestCaseItem;
   final String image;
   final String title;
 
-  const BaseCaseBox({Key key, @required this.image, @required this.title})
+  const BaseCaseBox(
+      {Key key,
+      @required this.image,
+      @required this.title,
+      @required this.guestCaseItem})
       : super(key: key);
 
   @override
@@ -43,6 +48,22 @@ class _BaseCaseBoxState extends State<BaseCaseBox> {
             ),
           ),
         ),
+        header: widget.guestCaseItem
+            ? SizedBox()
+            : Row(
+                children: [
+                  Container(
+                    color: Colors.red,
+                    width: 40,
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 40,
+                    ),
+                  ),
+                ],
+              ),
         //this is the Image of the CaseBox
         child: Container(
           decoration: BoxDecoration(

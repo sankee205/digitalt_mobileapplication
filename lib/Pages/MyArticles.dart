@@ -198,8 +198,10 @@ class _MyArticlesState extends State<MyArticles> {
                                                           )));
                                             },
                                             child: BaseCaseBox(
-                                                image: caseObject['image'],
-                                                title: caseObject['title']))));
+                                              image: caseObject['image'],
+                                              title: caseObject['title'],
+                                              guestCaseItem: false,
+                                            ))));
                               }).toList(),
                             ),
                           ],
