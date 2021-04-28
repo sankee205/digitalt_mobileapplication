@@ -41,4 +41,11 @@ class CaseItem {
     assert(introduction != null);
     assert(text != null);
   }
+  CaseItem.fromData(Map<String, dynamic> data)
+      : image = data['image'],
+        title = data['title'],
+        author = data['author'],
+        publishedDate = data['publishedDate'],
+        introduction = data['introduction'],
+        text = data['text'];
 }
