@@ -12,6 +12,7 @@ class FirestoreService {
     try {
       await _usersCollectionReference.doc(user.uid).set(user.toJson());
     } catch (e) {
+      print(e);
       return e.message;
     }
   }
@@ -23,7 +24,8 @@ class FirestoreService {
       BaseUser user = BaseUser.fromData(userData.data());
       return user;
     } catch (e) {
-      return e.message;
+      print(e);
+      return null;
     }
   }
 }

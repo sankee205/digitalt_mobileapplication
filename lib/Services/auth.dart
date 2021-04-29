@@ -137,8 +137,13 @@ class AuthService {
             userRole: 'Guest');
         return true;
       } else {
-        _currentUser = await _firestoreService.getUser(user.uid);
-        return true;
+        var result = await _firestoreService.getUser(user.uid);
+        if (result == null) {
+          return false;
+        } else {
+          _currentUser = result;
+          return true;
+        }
       }
     } else {
       return false;

@@ -2,9 +2,7 @@ import 'package:digitalt_application/Layouts/BaseAppBar.dart';
 import 'package:digitalt_application/Layouts/BaseAppDrawer.dart';
 import 'package:digitalt_application/Layouts/BaseBottomAppBar.dart';
 import 'package:digitalt_application/Services/DataBaseService.dart';
-import 'package:digitalt_application/Services/auth.dart';
 import 'package:digitalt_application/models/subscription.dart';
-import 'package:digitalt_application/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -20,14 +18,14 @@ class DisplayVippsOrder extends StatefulWidget {
 }
 
 class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
-  final AuthService _auth = AuthService();
   final DatabaseService _databaseService = DatabaseService();
-  String _amount;
-  String _transactionId;
+  String _amount = '';
+  String _transactionId = '';
   @override
   void initState() {
     super.initState();
     _setOrderDetails();
+    _setUserRole();
   }
 
   _setOrderDetails() async {
@@ -47,13 +45,20 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
     });
   }
 
-  _signOut() async {
-    print('signing out');
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      print(e);
+  _displayAmount(String number) {
+    if (number != '') {
+      List<String> characterList = number.split('');
+      characterList.insert(number.length - 2, ',');
+      String newNumber = characterList.join();
+      print(newNumber);
+      return newNumber;
+    } else {
+      return '';
     }
+  }
+
+  _setUserRole() async {
+    await _databaseService.setUserRole(widget.uid, 'Subscriber');
   }
 
   @override
@@ -103,7 +108,7 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
                       SizedBox(
                         height: 30,
                       ),
-                      Text('Kr. ' + _amount),
+                      Text('Kr. ' + _displayAmount(_amount)),
                       SizedBox(
                         height: 30,
                       ),

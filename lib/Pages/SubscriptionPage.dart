@@ -71,8 +71,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
       });
     } else {
       await _vippsApi.initiatePayment('93249909').then((value) async {
-        await _webLaunch(true, value);
-        await _vippsApi.getPaymentDetails();
+        if (value != null) {
+          await _webLaunch(true, value);
+          await _vippsApi.getPaymentDetails();
+        }
       });
       sleep(const Duration(seconds: 5));
       _capturePayment();
@@ -80,6 +82,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   }
 
   _webLaunch(bool state, String url) async {
+    print('in web launch');
     switch (state) {
       case true:
         print('opening web view');
@@ -96,9 +99,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   _capturePayment() async {
     dynamic response = await _vippsApi.capturePayment();
     print(response);
-    if (response.contains('status')) {
-      final jsonResponse = json.decode(response);
-      print(jsonResponse['orderId']);
+    print(response.toString().contains('status'));
+    if (response.toString().contains('status')) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -297,14 +299,71 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             SizedBox(
                               height: 20,
                             ),
-                            Text('Type: ' +
-                                widget._currentUser.mySubscription
-                                    .transactionText),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text('Pris: ' +
-                                widget._currentUser.mySubscription.amount),
+                            Container(
+                                margin: EdgeInsets.all(5),
+                                width: 300,
+                                child: Material(
+                                  color: Colors.blueAccent,
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.fromLTRB(10, 5, 10, 0),
+                                        color: Colors.greenAccent,
+                                        height: 75,
+                                        child: Center(
+                                          child: Text(
+                                            'Abonnement 1',
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        margin:
+                                            EdgeInsets.fromLTRB(10, 0, 10, 5),
+                                        color: Colors.white,
+                                        height: 200,
+                                        child: Center(
+                                            child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text('Type: ' +
+                                                widget
+                                                    ._currentUser
+                                                    .mySubscription
+                                                    .transactionText),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text('Betalt: ' +
+                                                _displayAmount(widget
+                                                    ._currentUser
+                                                    .mySubscription
+                                                    .amount)),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text('Status: ' +
+                                                widget._currentUser
+                                                    .mySubscription.status
+                                                    .toUpperCase())
+                                          ],
+                                        )),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                                )),
                             SizedBox(
                               height: 20,
                             ),
@@ -315,5 +374,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
         ),
       ),
     );
+  }
+
+  _displayAmount(String number) {
+    List<String> characterList = number.split('');
+    characterList.insert(number.length - 2, ',');
+    String newNumber = characterList.join();
+    print(newNumber);
+    return newNumber;
   }
 }

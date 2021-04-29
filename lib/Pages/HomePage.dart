@@ -100,6 +100,35 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  _setSearchBarList() {
+    switch (_currentUserRole) {
+      case 'Admin':
+        setState(() {
+          _searchCaseList = _allCaseList;
+        });
+        break;
+      case 'Subscriber':
+        setState(() {
+          _searchCaseList = _allCaseList;
+        });
+        break;
+      case 'User':
+        setState(() {
+          _searchCaseList = _guestList;
+        });
+        break;
+      case 'Guest':
+        setState(() {
+          _searchCaseList = _guestList;
+        });
+        break;
+      default:
+        setState(() {
+          _searchCaseList = _guestList;
+        });
+    }
+  }
+
   _getGuestList() async {
     List<String> firebaseList = [];
     List resultant = await _db.getGuestListContent();
@@ -148,6 +177,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     _createStringList();
+    _setSearchBarList();
     //returns a material design
     return Scaffold(
       //this is the appbar for the home page
@@ -429,86 +459,19 @@ class HomePageState extends State<HomePage> {
                                     switch (_currentUserRole) {
                                       case 'Admin':
                                         {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CasePage(
-                                                        image:
-                                                            caseObject['image'],
-                                                        title:
-                                                            caseObject['title'],
-                                                        author: caseObject[
-                                                            'author'],
-                                                        publishedDate:
-                                                            caseObject[
-                                                                'publishedDate'],
-                                                        introduction:
-                                                            caseObject[
-                                                                'introduction'],
-                                                        text:
-                                                            caseObject['text'],
-                                                        lastEdited: caseObject[
-                                                            'lastEdited'],
-                                                        searchBar: false,
-                                                      )));
+                                          _goToCasePage(caseObject);
                                         }
                                         break;
                                       case 'Subscriber':
                                         {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CasePage(
-                                                        image:
-                                                            caseObject['image'],
-                                                        title:
-                                                            caseObject['title'],
-                                                        author: caseObject[
-                                                            'author'],
-                                                        publishedDate:
-                                                            caseObject[
-                                                                'publishedDate'],
-                                                        introduction:
-                                                            caseObject[
-                                                                'introduction'],
-                                                        text:
-                                                            caseObject['text'],
-                                                        lastEdited: caseObject[
-                                                            'lastEdited'],
-                                                        searchBar: false,
-                                                      )));
+                                          _goToCasePage(caseObject);
                                         }
                                         break;
                                       case 'User':
                                         {
                                           if (_guestList
                                               .contains(caseObject['title'])) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CasePage(
-                                                          image: caseObject[
-                                                              'image'],
-                                                          title: caseObject[
-                                                              'title'],
-                                                          author: caseObject[
-                                                              'author'],
-                                                          publishedDate:
-                                                              caseObject[
-                                                                  'publishedDate'],
-                                                          introduction:
-                                                              caseObject[
-                                                                  'introduction'],
-                                                          text: caseObject[
-                                                              'text'],
-                                                          lastEdited:
-                                                              caseObject[
-                                                                  'lastEdited'],
-                                                          searchBar: false,
-                                                        )));
+                                            _goToCasePage(caseObject);
                                           }
                                         }
                                         break;
@@ -516,30 +479,7 @@ class HomePageState extends State<HomePage> {
                                         {
                                           if (_guestList
                                               .contains(caseObject['title'])) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CasePage(
-                                                          image: caseObject[
-                                                              'image'],
-                                                          title: caseObject[
-                                                              'title'],
-                                                          author: caseObject[
-                                                              'author'],
-                                                          publishedDate:
-                                                              caseObject[
-                                                                  'publishedDate'],
-                                                          introduction:
-                                                              caseObject[
-                                                                  'introduction'],
-                                                          text: caseObject[
-                                                              'text'],
-                                                          lastEdited:
-                                                              caseObject[
-                                                                  'lastEdited'],
-                                                          searchBar: false,
-                                                        )));
+                                            _goToCasePage(caseObject);
                                           }
                                         }
                                         break;
@@ -561,5 +501,154 @@ class HomePageState extends State<HomePage> {
             )),
       )),
     );
+  }
+
+  _goToCasePage(dynamic caseObject) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CasePage(
+                  image: caseObject['image'],
+                  title: caseObject['title'],
+                  author: caseObject['author'],
+                  publishedDate: caseObject['publishedDate'],
+                  introduction: caseObject['introduction'],
+                  text: caseObject['text'],
+                  lastEdited: caseObject['lastEdited'],
+                  searchBar: false,
+                )));
+  }
+
+  _allCasesContainer(dynamic caseObject, bool sisteNytt) {
+    switch (_currentUserRole) {
+      case 'Admin':
+        {
+          GestureDetector(
+              onTap: () {
+                _goToCasePage(caseObject);
+              },
+              child: sisteNytt
+                  ? BaseCaseBox(
+                      image: caseObject['image'],
+                      title: caseObject['title'],
+                      guestCaseItem: _guestList.contains(caseObject['title']),
+                    )
+                  : Container(
+                      //height: 40,
+                      width: 500,
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey.shade600)),
+                      margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
+                      alignment: Alignment.topLeft,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          caseObject['title'],
+                          style: TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                    ));
+        }
+        break;
+      case 'Subscriber':
+        {
+          GestureDetector(
+              onTap: () {
+                _goToCasePage(caseObject);
+              },
+              child: sisteNytt
+                  ? BaseCaseBox(
+                      image: caseObject['image'],
+                      title: caseObject['title'],
+                      guestCaseItem: _guestList.contains(caseObject['title']),
+                    )
+                  : Container(
+                      //height: 40,
+                      width: 500,
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey.shade600)),
+                      margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
+                      alignment: Alignment.topLeft,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          caseObject['title'],
+                          style: TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                    ));
+        }
+        break;
+      case 'User':
+        {
+          GestureDetector(
+              onTap: () {
+                if (_guestList.contains(caseObject['title'])) {
+                  _goToCasePage(caseObject);
+                }
+              },
+              child: sisteNytt
+                  ? BaseCaseBox(
+                      image: caseObject['image'],
+                      title: caseObject['title'],
+                      guestCaseItem: _guestList.contains(caseObject['title']),
+                    )
+                  : Container(
+                      //height: 40,
+                      width: 500,
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey.shade600)),
+                      margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
+                      alignment: Alignment.topLeft,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          caseObject['title'],
+                          style: TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                    ));
+        }
+        break;
+      case 'Guest':
+        {
+          GestureDetector(
+              onTap: () {
+                if (_guestList.contains(caseObject['title'])) {
+                  _goToCasePage(caseObject);
+                }
+              },
+              child: sisteNytt
+                  ? BaseCaseBox(
+                      image: caseObject['image'],
+                      title: caseObject['title'],
+                      guestCaseItem: _guestList.contains(caseObject['title']),
+                    )
+                  : Container(
+                      //height: 40,
+                      width: 500,
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.grey.shade600)),
+                      margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
+                      alignment: Alignment.topLeft,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          caseObject['title'],
+                          style: TextStyle(fontStyle: FontStyle.normal),
+                        ),
+                      ),
+                    ));
+        }
+        break;
+    }
   }
 }

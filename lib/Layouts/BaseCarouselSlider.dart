@@ -53,7 +53,6 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getUserRole();
     _getGuestList();

@@ -200,7 +200,7 @@ class _MyArticlesState extends State<MyArticles> {
                                             child: BaseCaseBox(
                                               image: caseObject['image'],
                                               title: caseObject['title'],
-                                              guestCaseItem: false,
+                                              guestCaseItem: true,
                                             ))));
                               }).toList(),
                             ),

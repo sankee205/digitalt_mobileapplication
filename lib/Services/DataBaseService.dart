@@ -26,6 +26,10 @@ class DatabaseService {
     return await _userCollection.doc(id).update({'myCases': myCases});
   }
 
+  Future setUserRole(String id, String role) async {
+    return await _userCollection.doc(id).update({'userRole': role});
+  }
+
   //------------------case item methods-----------------------------------------
   Future updateCaseItemData(String id, String image, String title, List author,
       String publishedDate, String introduction, List text) async {
