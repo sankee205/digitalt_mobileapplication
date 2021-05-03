@@ -331,7 +331,6 @@ class HomePageState extends State<HomePage> {
   }
 
   _casesContainer(dynamic caseObject, bool alllist) {
-    print(_currentUserRole);
     switch (_currentUserRole) {
       case 'Admin':
         return GestureDetector(
@@ -394,70 +393,68 @@ class HomePageState extends State<HomePage> {
 
         break;
       case 'User':
-        {
-          GestureDetector(
-              onTap: () {
-                if (_guestList.contains(caseObject['title'])) {
-                  _goToCasePage(caseObject);
-                }
-              },
-              child: alllist
-                  ? BaseCaseBox(
-                      image: caseObject['image'],
-                      title: caseObject['title'],
-                      guestCaseItem: _guestList.contains(caseObject['title']),
-                    )
-                  : Container(
-                      //height: 40,
-                      width: 500,
-                      padding: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey.shade600)),
-                      margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
-                      alignment: Alignment.topLeft,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          caseObject['title'],
-                          style: TextStyle(fontStyle: FontStyle.normal),
-                        ),
+        return GestureDetector(
+            onTap: () {
+              if (_guestList.contains(caseObject['title'])) {
+                _goToCasePage(caseObject);
+              }
+            },
+            child: alllist
+                ? BaseCaseBox(
+                    image: caseObject['image'],
+                    title: caseObject['title'],
+                    guestCaseItem: _guestList.contains(caseObject['title']),
+                  )
+                : Container(
+                    //height: 40,
+                    width: 500,
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey.shade600)),
+                    margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
+                    alignment: Alignment.topLeft,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        caseObject['title'],
+                        style: TextStyle(fontStyle: FontStyle.normal),
                       ),
-                    ));
-        }
+                    ),
+                  ));
+
         break;
       case 'Guest':
-        {
-          GestureDetector(
-              onTap: () {
-                if (_guestList.contains(caseObject['title'])) {
-                  _goToCasePage(caseObject);
-                }
-              },
-              child: alllist
-                  ? BaseCaseBox(
-                      image: caseObject['image'],
-                      title: caseObject['title'],
-                      guestCaseItem: _guestList.contains(caseObject['title']),
-                    )
-                  : Container(
-                      //height: 40,
-                      width: 500,
-                      padding: EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey.shade600)),
-                      margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
-                      alignment: Alignment.topLeft,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          caseObject['title'],
-                          style: TextStyle(fontStyle: FontStyle.normal),
-                        ),
+        return GestureDetector(
+            onTap: () {
+              if (_guestList.contains(caseObject['title'])) {
+                _goToCasePage(caseObject);
+              }
+            },
+            child: alllist
+                ? BaseCaseBox(
+                    image: caseObject['image'],
+                    title: caseObject['title'],
+                    guestCaseItem: _guestList.contains(caseObject['title']),
+                  )
+                : Container(
+                    //height: 40,
+                    width: 500,
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey.shade600)),
+                    margin: EdgeInsets.fromLTRB(5, 3, 5, 3),
+                    alignment: Alignment.topLeft,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        caseObject['title'],
+                        style: TextStyle(fontStyle: FontStyle.normal),
                       ),
-                    ));
-        }
+                    ),
+                  ));
+
         break;
     }
   }

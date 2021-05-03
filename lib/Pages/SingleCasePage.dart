@@ -176,7 +176,7 @@ class _CasePageState extends State<CasePage> {
                               child: Text(
                                 widget.title,
                                 style: TextStyle(
-                                  fontSize: 30,
+                                  fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -269,7 +269,7 @@ class _CasePageState extends State<CasePage> {
                               child: Text(
                                 widget.introduction,
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
@@ -287,7 +287,7 @@ class _CasePageState extends State<CasePage> {
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       item,
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                   );
                                 }).toList(),

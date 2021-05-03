@@ -27,7 +27,11 @@ class DatabaseService {
   }
 
   Future setUserRole(String id, String role) async {
-    return await _userCollection.doc(id).update({'userRole': role});
+    if (role != 'Admin') {
+      return await _userCollection.doc(id).update({'userRole': role});
+    } else {
+      return null;
+    }
   }
 
   //------------------case item methods-----------------------------------------
