@@ -38,7 +38,17 @@ class VippsApi {
     return null;
   }
 
-  Future<String> initiatePayment(String phoneNumber) async {
+  Future<String> initiatePayment(String phoneNumber, int type) async {
+    String cost;
+    String subscriptionType;
+    if (type == 1) {
+      subscriptionType = "One year subscription";
+      cost = '105000';
+    }
+    if (type == 2) {
+      subscriptionType = "One month subscription";
+      cost = '10000';
+    }
     String randomNumber = Random().nextInt(1000).toString();
     Map requestBody = {
       "customerInfo": {"mobileNumber": "90232609"},
@@ -57,8 +67,8 @@ class VippsApi {
       "transaction": {
         "orderId":
             "acme-shop-" + randomNumber + "-order" + randomNumber + "abc",
-        "amount": '105000',
-        "transactionText": "One year subscription"
+        "amount": cost,
+        "transactionText": subscriptionType
       }
     };
     http.Response response =
@@ -119,7 +129,13 @@ class VippsApi {
       final body = response.body.toString();
       return body;
     } else {
-      return response.statusCode.toString();
+      final body = json.decode(response.body);
+      dynamic variable = body[0];
+      if (variable['errorCode'].toString() == '62') {
+        return 'denied';
+      } else {
+        return response.statusCode.toString();
+      }
     }
   }
 

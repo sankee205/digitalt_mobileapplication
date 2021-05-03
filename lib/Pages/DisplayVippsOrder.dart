@@ -21,6 +21,7 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
   final DatabaseService _databaseService = DatabaseService();
   String _amount = '';
   String _transactionId = '';
+  String _type = '';
   @override
   void initState() {
     super.initState();
@@ -42,6 +43,7 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
     setState(() {
       _amount = transactionInfo['amount'].toString();
       _transactionId = transactionInfo['transactionId'].toString();
+      _type = transactionInfo['transactionText'];
     });
   }
 
@@ -109,6 +111,10 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
                         height: 30,
                       ),
                       Text('Kr. ' + _displayAmount(_amount)),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Text('Din abonnement er nå:' + _type),
                       SizedBox(
                         height: 30,
                       ),

@@ -61,22 +61,22 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     }
   }
 
-  _initiateVipps() async {
+  _initiateVipps(int type) async {
     if (_isAppInstalled) {
-      await _vippsApi.initiatePayment('93249909').then((value) async {
+      await _vippsApi.initiatePayment('93249909', type).then((value) async {
         await LaunchApp.openApp(
             androidPackageName: 'vipps.   vipps',
             iosUrlScheme: 'vipps://',
             openStore: false);
       });
     } else {
-      await _vippsApi.initiatePayment('93249909').then((value) async {
+      await _vippsApi.initiatePayment('93249909', type).then((value) async {
         if (value != null) {
           await _webLaunch(true, value);
           await _vippsApi.getPaymentDetails();
         }
       });
-      sleep(const Duration(seconds: 5));
+      sleep(const Duration(seconds: 10));
       _capturePayment();
     }
   }
@@ -99,7 +99,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   _capturePayment() async {
     dynamic response = await _vippsApi.capturePayment();
     print(response);
-    print(response.toString().contains('status'));
     if (response.toString().contains('status')) {
       Navigator.push(
         context,
@@ -112,16 +111,19 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     } else {
       switch (response) {
         case '404':
-          sleep(const Duration(seconds: 3));
+          sleep(const Duration(seconds: 10));
           _capturePayment();
           break;
         case '402':
-          sleep(const Duration(seconds: 3));
+          sleep(const Duration(seconds: 10));
           _capturePayment();
           break;
         case '429':
-          sleep(const Duration(seconds: 4));
-          _capturePayment();
+          _webLaunch(false, null);
+          break;
+        case 'denied':
+          _webLaunch(false, null);
+
           break;
         default:
       }
@@ -236,14 +238,15 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                           ),
                                         )),
                                     onTap: () {
-                                      _initiateVipps();
+                                      _initiateVipps(1);
                                     },
                                   ),
                                 ),
                                 ResponsiveGridCol(
-                                    xl: 6,
-                                    lg: 6,
-                                    xs: 12,
+                                  xl: 6,
+                                  lg: 6,
+                                  xs: 12,
+                                  child: GestureDetector(
                                     child: Container(
                                         margin: EdgeInsets.all(5),
                                         width: 300,
@@ -276,16 +279,31 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                 color: Colors.white,
                                                 height: 200,
                                                 child: Center(
-                                                  child: Text(
-                                                      'Prøve abonnement: 1 måned'),
-                                                ),
+                                                    child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Text(
+                                                        'En måned, prøve abonemment'),
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Text('Pris: 100,00 kr'),
+                                                  ],
+                                                )),
                                               ),
                                               SizedBox(
                                                 height: 10,
                                               ),
                                             ],
                                           ),
-                                        ))),
+                                        )),
+                                    onTap: () {
+                                      _initiateVipps(2);
+                                    },
+                                  ),
+                                ),
                               ],
                             ),
                           ],
