@@ -8,9 +8,6 @@ import 'dart:convert';
  * @Sander Keedklang
  */
 
-/**
- * this is the caseItem object class.
- */
 class CaseItem {
   final String image;
   final String title;
@@ -30,16 +27,6 @@ class CaseItem {
     };
   }
 
-  dynamic fromMap(Map<String, dynamic> caseItem) {
-    return CaseItem(
-        image: caseItem['image'],
-        title: caseItem['title'],
-        author: caseItem['author'],
-        publishedDate: caseItem['publishedDate'],
-        introduction: caseItem['introduction'],
-        text: caseItem['text']);
-  }
-
   CaseItem(
       {@required this.image,
       @required this.title,
@@ -54,4 +41,11 @@ class CaseItem {
     assert(introduction != null);
     assert(text != null);
   }
+  CaseItem.fromData(Map<String, dynamic> data)
+      : image = data['image'],
+        title = data['title'],
+        author = data['author'],
+        publishedDate = data['publishedDate'],
+        introduction = data['introduction'],
+        text = data['text'];
 }

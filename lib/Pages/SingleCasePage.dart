@@ -1,21 +1,20 @@
-import 'dart:math';
 import 'package:digitalt_application/Layouts/BaseAppBar.dart';
 import 'package:digitalt_application/Layouts/BaseAppDrawer.dart';
 import 'package:digitalt_application/Layouts/BaseBottomAppBar.dart';
 import 'package:digitalt_application/Services/DataBaseService.dart';
-import 'package:easy_rich_text/easy_rich_text.dart';
+import 'package:digitalt_application/Services/auth.dart';
+import 'package:digitalt_application/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:responsive_grid/responsive_grid.dart';
 
 /*
- * this is the case PAge. t takes in a caseitem and creates a layout 
+ * this is the Case Page. t takes in a caseitem and creates a layout 
  * for the caseitem to be read.
  */
-class CasePage extends StatelessWidget {
-  final DatabaseService db = DatabaseService();
-  //caseItem to be layed out in the casepage
+class CasePage extends StatefulWidget {
+  final bool searchBar;
   final String image;
   final String title;
   final List author;
@@ -23,8 +22,6 @@ class CasePage extends StatelessWidget {
   final String lastEdited;
   final String introduction;
   final List text;
-
-  Text _lastEditedText;
 
   CasePage(
       {Key key,
@@ -34,28 +31,104 @@ class CasePage extends StatelessWidget {
       @required this.publishedDate,
       @required this.introduction,
       @required this.text,
+      @required this.searchBar,
       this.lastEdited})
       : super(key: key);
+  @override
+  _CasePageState createState() => _CasePageState();
+}
+
+class _CasePageState extends State<CasePage> {
+  final DatabaseService _db = DatabaseService();
+  final AuthService _auth = AuthService();
+
+  BaseUser _currentUser;
+  Text _lastEditedText;
+  bool isArticleSaved;
+
+  _setBaseUser() async {
+    if (!_auth.isUserAnonymous()) {
+      var user = await _auth.getFirebaseUser();
+      if (user != null) {
+        setState(() {
+          _currentUser = user;
+        });
+        if (user.myCases.contains(widget.title)) {
+          setState(() {
+            isArticleSaved = true;
+          });
+        } else {
+          setState(() {
+            isArticleSaved = false;
+          });
+        }
+      } else {
+        print('user from authservice is null');
+      }
+    }
+  }
+
+  _changeMyCasesList(bool value) {
+    if (!value && _currentUser.myCases.contains(widget.title)) {
+      List newList = _currentUser.myCases;
+      newList.remove(widget.title);
+      _updateMyCasesList(newList);
+    }
+    if (value && !_currentUser.myCases.contains(widget.title)) {
+      List newList = _currentUser.myCases;
+      newList.add(widget.title);
+      _updateMyCasesList(newList);
+    }
+  }
+
+  bool _updateMyCasesList(List newMyCaseList) {
+    bool success = true;
+    dynamic result = _db.updateMyCasesData(_currentUser.uid, newMyCaseList);
+    if (result != null) {
+      success = true;
+    } else {
+      success = false;
+    }
+    return success;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setBaseUser();
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (lastEdited != null) {
-      _lastEditedText = Text('Sist edret: ' + lastEdited);
+    if (widget.lastEdited != null) {
+      _lastEditedText = Text('Sist edret: ' + widget.lastEdited);
     }
     return Scaffold(
       //this is the appbar for the home page
-      appBar: BaseAppBar(
-        title: Text(
-          'DIGI-TALT',
-          style: TextStyle(color: Colors.white),
-        ),
-        appBar: AppBar(),
-        widgets: <Widget>[Icon(Icons.more_vert)],
-      ),
+      appBar: widget.searchBar
+          ? null
+          : BaseAppBar(
+              title: Text(
+                'DIGI-TALT.NO',
+                style: TextStyle(color: Colors.white),
+              ),
+              appBar: AppBar(),
+              widgets: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: Container(
+                    width: 36,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular((20))),
+                  ),
+                ),
+              ],
+            ),
       bottomNavigationBar: BaseBottomAppBar(),
       //creates the menu in the appbar(drawer)
       drawer: BaseAppDrawer(),
-
       floatingActionButton: FloatingActionButton(
         child: Icon(
           Icons.arrow_back,
@@ -76,29 +149,24 @@ class CasePage extends StatelessWidget {
           //here starts the case
           child: Container(
             width: 800,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(image),
-                fit: BoxFit.fitWidth,
-                alignment: FractionalOffset.topCenter,
-              ),
-            ),
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Stack(
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        0.0,
-                        max(MediaQuery.of(context).size.width * 0.225, 225),
-                        0.0,
-                        0.0),
+                    padding: EdgeInsets.all(0.0),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       child: Material(
-                        borderRadius: BorderRadius.circular(35),
                         child: Column(
                           children: <Widget>[
+                            Container(
+                              width: 800,
+                              child: Image(
+                                image: NetworkImage(widget.image),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
@@ -106,9 +174,9 @@ class CasePage extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                               child: Text(
-                                title,
+                                widget.title,
                                 style: TextStyle(
-                                  fontSize: 30,
+                                  fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -117,44 +185,91 @@ class CasePage extends StatelessWidget {
                             SizedBox(
                               height: 10,
                             ),
-                            //in this row you find author and published date
-                            Row(
-                              children: [
-                                Icon(Icons.person),
-                                Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 170,
-                                  child: ResponsiveGridRow(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: author.map((author) {
-                                      return ResponsiveGridCol(
-                                          xl: 12,
-                                          md: 12,
-                                          xs: 12,
-                                          child: Container(
-                                            child: Text(
-                                              author,
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: ResponsiveGridRow(
+                                children: [
+                                  ResponsiveGridCol(
+                                    lg: 4,
+                                    xs: 4,
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.person),
+                                        Container(
+                                          width: 60,
+                                          margin: EdgeInsets.all(10),
+                                          child: ResponsiveGridRow(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children:
+                                                widget.author.map((author) {
+                                              return ResponsiveGridCol(
+                                                  xl: 12,
+                                                  md: 12,
+                                                  xs: 12,
+                                                  child: Container(
+                                                    child: Text(
+                                                      author,
+                                                      style: TextStyle(
+                                                          fontSize: 9),
+                                                    ),
+                                                  ));
+                                            }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ResponsiveGridCol(
+                                    lg: 4,
+                                    xs: 4,
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.date_range),
+                                        Text(
+                                          widget.publishedDate,
+                                          style: TextStyle(fontSize: 10),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ResponsiveGridCol(
+                                    lg: 4,
+                                    xs: 4,
+                                    child: isArticleSaved == null
+                                        ? SizedBox()
+                                        : Row(children: [
+                                            Text(
+                                              'Lagre Artikkel',
                                               style: TextStyle(fontSize: 10),
                                             ),
-                                          ));
-                                    }).toList(),
+                                            Checkbox(
+                                              value: isArticleSaved,
+                                              activeColor: Colors.red,
+                                              onChanged: (bool newValue) {
+                                                _changeMyCasesList(newValue);
+                                                setState(() {
+                                                  isArticleSaved = newValue;
+                                                });
+                                              },
+                                            ),
+                                          ]),
                                   ),
-                                ),
-                                Icon(Icons.date_range),
-                                Text(publishedDate)
-                              ],
+                                ],
+                              ),
                             ),
+                            //in this row you find author and published date
+
                             SizedBox(
                               height: 10,
                             ),
 
-                            Container(
-                              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                               child: Text(
-                                introduction,
+                                widget.introduction,
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
@@ -164,15 +279,15 @@ class CasePage extends StatelessWidget {
                             //this is the description of the case. the main text
                             Container(
                               margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              width: 600,
+                              width: 700,
                               child: Column(
-                                children: text.map((item) {
+                                children: widget.text.map((item) {
                                   return Container(
                                     margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       item,
-                                      style: TextStyle(fontSize: 20),
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                   );
                                 }).toList(),
