@@ -6,7 +6,8 @@ import 'package:digitalt_application/Layouts/BaseCaseBox.dart';
 import 'package:digitalt_application/Layouts/BaseSearch.dart';
 import 'package:digitalt_application/Services/DataBaseService.dart';
 import 'package:digitalt_application/Pages/SingleCasePage.dart';
-import 'package:digitalt_application/Services/VippsApi.dart';
+import 'package:digitalt_application/models/subscription.dart';
+import 'package:digitalt_application/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -173,10 +174,27 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  _checkSubscriptionStatus() async {
+    var user = await _auth.getSubscriptionStatus();
+    if (user == null) {
+      print('something is wrong in subscriptionstatus');
+    } else {
+      if (user is BaseUser) {
+        Subscription newSubScription = user.mySubscription;
+        newSubScription.setFreeMonth();
+        await _db.updateSubscriptionData(user.uid, newSubScription);
+        await _db.setUserRole(user.uid, 'User');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _createStringList();
     _setSearchBarList();
+    if (_currentUserRole == 'Subscriber') {
+      _checkSubscriptionStatus();
+    }
     //returns a material design
     return Scaffold(
       //this is the appbar for the home page

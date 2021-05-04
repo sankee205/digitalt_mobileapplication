@@ -5,8 +5,8 @@ import 'package:digitalt_application/Layouts/BaseAppBar.dart';
 import 'package:digitalt_application/Layouts/BaseAppDrawer.dart';
 import 'package:digitalt_application/Layouts/BaseBottomAppBar.dart';
 import 'package:digitalt_application/Pages/DisplayVippsOrder.dart';
+import 'package:digitalt_application/Services/DataBaseService.dart';
 import 'package:digitalt_application/Services/VippsApi.dart';
-import 'package:digitalt_application/Services/auth.dart';
 import 'package:digitalt_application/models/user.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,15 +25,20 @@ class SubscriptionPage extends StatefulWidget {
 }
 
 class _SubscriptionPageState extends State<SubscriptionPage> {
-  final AuthService _auth = AuthService();
   final VippsApi _vippsApi = VippsApi();
+  final DatabaseService _db = DatabaseService();
   bool _isAppInstalled = false;
+  int _type;
+
+  String _month = '';
+  String _year = '';
 
   @override
   void initState() {
     super.initState();
     _getAccessToken();
     _appInstalled();
+    _getPrices();
   }
 
   _appInstalled() async {
@@ -46,6 +51,20 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     }*/
   }
 
+  _getPrices() async {
+    List resultant = await _db.getVippsPricesContent();
+    if (resultant != null) {
+      var result = resultant[0];
+      print(result);
+      setState(() {
+        _month = result['oneMonth'];
+        _year = result['oneYear'];
+      });
+    } else {
+      print('resultant is null');
+    }
+  }
+
   _getAccessToken() async {
     var token = await _vippsApi.getAccessToken();
     if (token != null) {
@@ -53,25 +72,20 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     }
   }
 
-  _signOut() async {
-    print('signing out');
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  _initiateVipps(int type) async {
+  _initiateVipps(String cost) async {
     if (_isAppInstalled) {
-      await _vippsApi.initiatePayment('93249909', type).then((value) async {
+      await _vippsApi
+          .initiatePayment('93249909', _type, cost)
+          .then((value) async {
         await LaunchApp.openApp(
             androidPackageName: 'vipps.   vipps',
             iosUrlScheme: 'vipps://',
             openStore: false);
       });
     } else {
-      await _vippsApi.initiatePayment('93249909', type).then((value) async {
+      await _vippsApi
+          .initiatePayment('93249909', _type, cost)
+          .then((value) async {
         if (value != null) {
           await _webLaunch(true, value);
           await _vippsApi.getPaymentDetails();
@@ -98,14 +112,20 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   }
 
   _capturePayment() async {
-    dynamic response = await _vippsApi.capturePayment();
+    String captureCost;
+    if (_type == 1) {
+      captureCost = _year;
+    } else {
+      captureCost = _month;
+    }
+    dynamic response = await _vippsApi.capturePayment(captureCost, _type);
     print(response);
     if (response.toString().contains('status')) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              DisplayVippsOrder(response, widget._currentUser.uid),
+              DisplayVippsOrder(response, widget._currentUser.uid, _type),
         ),
       );
       _webLaunch(false, null);
@@ -243,7 +263,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                         height: 20,
                                                       ),
                                                       Text(
-                                                        'Pris: 1050,00 kr',
+                                                        'Pris: ' +
+                                                            _displayAmount(
+                                                                _year) +
+                                                            'kr',
                                                         style: TextStyle(
                                                             color: theme
                                                                     .getState()
@@ -260,7 +283,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                             ),
                                           )),
                                       onTap: () {
-                                        _initiateVipps(1);
+                                        setState(() {
+                                          _type = 1;
+                                        });
+                                        _initiateVipps(_year);
                                       },
                                     ),
                                   ),
@@ -324,13 +350,31 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                         height: 20,
                                                       ),
                                                       Text(
-                                                        'Pris: 100,00 kr',
+                                                        'Pris: ' +
+                                                            _displayAmount(
+                                                                _month) +
+                                                            'kr',
                                                         style: TextStyle(
                                                             color: theme
                                                                     .getState()
                                                                 ? Colors.white
                                                                 : Colors.black),
                                                       ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      widget
+                                                              ._currentUser
+                                                              .mySubscription
+                                                              .freeMonthUsed
+                                                          ? Text(
+                                                              'Du har allerede brukt din prøve måned',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  fontSize: 18),
+                                                            )
+                                                          : SizedBox(),
                                                     ],
                                                   )),
                                                 ),
@@ -341,7 +385,14 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                             ),
                                           )),
                                       onTap: () {
-                                        _initiateVipps(2);
+                                        if (widget._currentUser.mySubscription
+                                                .freeMonthUsed !=
+                                            true) {
+                                          setState(() {
+                                            _type = 2;
+                                          });
+                                          _initiateVipps(_month);
+                                        } else {}
                                       },
                                     ),
                                   ),
@@ -461,10 +512,13 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   }
 
   _displayAmount(String number) {
-    List<String> characterList = number.split('');
-    characterList.insert(number.length - 2, ',');
-    String newNumber = characterList.join();
-    print(newNumber);
-    return newNumber;
+    if (number != '') {
+      List<String> characterList = number.split('');
+      characterList.insert(number.length - 2, ',');
+      String newNumber = characterList.join();
+      return newNumber;
+    } else {
+      return '';
+    }
   }
 }

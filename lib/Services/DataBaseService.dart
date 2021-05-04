@@ -235,4 +235,18 @@ class DatabaseService {
       'mySubscription': mySubscription.toJson(),
     });
   }
+
+  //------------------------------VippsPrices-------------------------------------
+  Future getVippsPricesContent() async {
+    List vippsList = [];
+    await FirebaseFirestore.instance
+        .collection('VippsPrices')
+        .get()
+        .then((value) => {
+              value.docs.forEach((element) {
+                vippsList.add(element);
+              })
+            });
+    return vippsList;
+  }
 }

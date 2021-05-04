@@ -28,6 +28,23 @@ class AuthService {
     return _auth.currentUser.uid;
   }
 
+  getSubscriptionStatus() async {
+    if (await getUserRole() == 'Subscriber') {
+      final now = DateTime.now();
+      final user = await getFirebaseUser();
+      final DateTime expiredDate =
+          DateTime.parse(user.mySubscription.expiredDate.toString());
+      final bool isExpired = expiredDate.isBefore(now);
+      if (isExpired) {
+        return user;
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   //returns the user role
   Future<String> getUserRole() async {
     if (_auth.currentUser.isAnonymous) {
@@ -103,6 +120,7 @@ class AuthService {
               orderId: '',
               status: 'nonActive',
               timeStamp: '',
+              expiredDate: '',
               transactionText: ''));
 
       await _firestoreService.createUser(_currentUser);
