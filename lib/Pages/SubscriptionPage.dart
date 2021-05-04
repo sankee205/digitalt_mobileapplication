@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:digitalt_application/AppManagement/ThemeManager.dart';
 import 'package:digitalt_application/Layouts/BaseAppBar.dart';
 import 'package:digitalt_application/Layouts/BaseAppDrawer.dart';
 import 'package:digitalt_application/Layouts/BaseBottomAppBar.dart';
@@ -11,6 +11,7 @@ import 'package:digitalt_application/models/user.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -132,262 +133,327 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //this is the appbar for the home page
-      appBar: BaseAppBar(
-        title: Text(
-          'DIGI-TALT.NO',
-          style: TextStyle(color: Colors.white),
-        ),
-        appBar: AppBar(),
-        widgets: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(30.0),
-            child: Container(
-              width: 36,
-              height: 30,
-              decoration: BoxDecoration(
-                  color: Colors.grey[800],
-                  borderRadius: BorderRadius.circular((20))),
-            ),
+    return Consumer<ThemeNotifier>(
+      builder: (context, theme, child) => Scaffold(
+        //this is the appbar for the home page
+        appBar: BaseAppBar(
+          title: Text(
+            'DIGI-TALT.NO',
+            style: TextStyle(color: Colors.white),
           ),
-        ],
-      ),
-      bottomNavigationBar: BaseBottomAppBar(),
+          appBar: AppBar(),
+          widgets: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(30.0),
+              child: Container(
+                width: 36,
+                height: 30,
+                decoration: BoxDecoration(
+                    color: Colors.grey[800],
+                    borderRadius: BorderRadius.circular((20))),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BaseBottomAppBar(),
 
-      //creates the menu in the appbar(drawer)
-      drawer: BaseAppDrawer(),
+        //creates the menu in the appbar(drawer)
+        drawer: BaseAppDrawer(),
 
-      //here comes the body of the home page
-      body: SingleChildScrollView(
-        child: Container(
-          child: Center(
-            child: Container(
-                width: 800,
-                child: Material(
-                  child: widget._currentUser.mySubscription.status ==
-                          'nonActive'
-                      ? Column(
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Abonnement',
-                              style: TextStyle(fontSize: 30),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            ResponsiveGridRow(
-                              children: [
-                                ResponsiveGridCol(
-                                  xl: 6,
-                                  lg: 6,
-                                  xs: 12,
-                                  child: GestureDetector(
-                                    child: Container(
-                                        margin: EdgeInsets.all(5),
-                                        width: 300,
-                                        child: Material(
-                                          color: Colors.blueAccent,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    10, 5, 10, 0),
-                                                color: Colors.greenAccent,
-                                                height: 75,
-                                                child: Center(
-                                                  child: Text(
-                                                    'Abonnement 1',
-                                                    style: TextStyle(
-                                                        fontSize: 25,
-                                                        color: Colors.white),
+        //here comes the body of the home page
+        body: SingleChildScrollView(
+          child: Container(
+            child: Center(
+              child: Container(
+                  width: 800,
+                  child: Material(
+                    child: widget._currentUser.mySubscription.status ==
+                            'nonActive'
+                        ? Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Abonnement',
+                                style: TextStyle(fontSize: 30),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              ResponsiveGridRow(
+                                children: [
+                                  ResponsiveGridCol(
+                                    xl: 6,
+                                    lg: 6,
+                                    xs: 12,
+                                    child: GestureDetector(
+                                      child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          width: 300,
+                                          child: Material(
+                                            color: Colors.blueAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      10, 5, 10, 0),
+                                                  color: Colors.greenAccent,
+                                                  height: 75,
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Abonnement 1',
+                                                      style: TextStyle(
+                                                          fontSize: 25,
+                                                          color: theme
+                                                                  .getState()
+                                                              ? Colors.black
+                                                              : Colors.white),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    10, 0, 10, 5),
-                                                color: Colors.white,
-                                                height: 200,
-                                                child: Center(
-                                                    child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    Text('Et års abonnement'),
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    Text('Pris: 1050,00 kr'),
-                                                  ],
-                                                )),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                    onTap: () {
-                                      _initiateVipps(1);
-                                    },
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      10, 0, 10, 5),
+                                                  color: theme.getState() ==
+                                                          false
+                                                      ? Colors.white
+                                                      : Colors.grey.shade800,
+                                                  height: 200,
+                                                  child: Center(
+                                                      child: Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'Et års abonnement',
+                                                        style: TextStyle(
+                                                            color: theme
+                                                                    .getState()
+                                                                ? Colors.white
+                                                                : Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'Pris: 1050,00 kr',
+                                                        style: TextStyle(
+                                                            color: theme
+                                                                    .getState()
+                                                                ? Colors.white
+                                                                : Colors.black),
+                                                      ),
+                                                    ],
+                                                  )),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                      onTap: () {
+                                        _initiateVipps(1);
+                                      },
+                                    ),
                                   ),
-                                ),
-                                ResponsiveGridCol(
-                                  xl: 6,
-                                  lg: 6,
-                                  xs: 12,
-                                  child: GestureDetector(
-                                    child: Container(
-                                        margin: EdgeInsets.all(5),
-                                        width: 300,
-                                        child: Material(
-                                          color: Colors.blueAccent,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    10, 5, 10, 0),
-                                                color: Colors.greenAccent,
-                                                height: 75,
-                                                child: Center(
-                                                  child: Text(
-                                                    'Abonnement 2',
-                                                    style: TextStyle(
-                                                        fontSize: 25,
-                                                        color: Colors.white),
+                                  ResponsiveGridCol(
+                                    xl: 6,
+                                    lg: 6,
+                                    xs: 12,
+                                    child: GestureDetector(
+                                      child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          width: 300,
+                                          child: Material(
+                                            color: Colors.blueAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      10, 5, 10, 0),
+                                                  color: Colors.greenAccent,
+                                                  height: 75,
+                                                  child: Center(
+                                                    child: Text(
+                                                      'Abonnement 2',
+                                                      style: TextStyle(
+                                                          fontSize: 25,
+                                                          color: theme
+                                                                  .getState()
+                                                              ? Colors.black
+                                                              : Colors.white),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              Container(
-                                                margin: EdgeInsets.fromLTRB(
-                                                    10, 0, 10, 5),
-                                                color: Colors.white,
-                                                height: 200,
-                                                child: Center(
-                                                    child: Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    Text(
-                                                        'En måned, prøve abonemment'),
-                                                    SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    Text('Pris: 100,00 kr'),
-                                                  ],
-                                                )),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                    onTap: () {
-                                      _initiateVipps(2);
-                                    },
+                                                Container(
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      10, 0, 10, 5),
+                                                  color: theme.getState() ==
+                                                          false
+                                                      ? Colors.white
+                                                      : Colors.grey.shade800,
+                                                  height: 200,
+                                                  child: Center(
+                                                      child: Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'En måned, prøve abonemment',
+                                                        style: TextStyle(
+                                                            color: theme
+                                                                    .getState()
+                                                                ? Colors.white
+                                                                : Colors.black),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Text(
+                                                        'Pris: 100,00 kr',
+                                                        style: TextStyle(
+                                                            color: theme
+                                                                    .getState()
+                                                                ? Colors.white
+                                                                : Colors.black),
+                                                      ),
+                                                    ],
+                                                  )),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                      onTap: () {
+                                        _initiateVipps(2);
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text('Ditt Abonnement'),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                                margin: EdgeInsets.all(5),
-                                width: 300,
-                                child: Material(
-                                  color: Colors.blueAccent,
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(10, 5, 10, 0),
-                                        color: Colors.greenAccent,
-                                        height: 75,
-                                        child: Center(
-                                          child: Text(
-                                            'Abonnement 1',
-                                            style: TextStyle(
-                                                fontSize: 25,
-                                                color: Colors.white),
+                                ],
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text('Ditt Abonnement'),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                  margin: EdgeInsets.all(5),
+                                  width: 300,
+                                  child: Material(
+                                    color: Colors.blueAccent,
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(10, 5, 10, 0),
+                                          color: Colors.greenAccent,
+                                          height: 75,
+                                          child: Center(
+                                            child: Text(
+                                              'Abonnement',
+                                              style: TextStyle(
+                                                  fontSize: 25,
+                                                  color: theme.getState()
+                                                      ? Colors.black
+                                                      : Colors.white),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(10, 0, 10, 5),
-                                        color: Colors.white,
-                                        height: 200,
-                                        child: Center(
-                                            child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Text('Type: ' +
-                                                widget
-                                                    ._currentUser
-                                                    .mySubscription
-                                                    .transactionText),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Text('Betalt: ' +
-                                                _displayAmount(widget
-                                                    ._currentUser
-                                                    .mySubscription
-                                                    .amount)),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Text('Status: ' +
-                                                widget._currentUser
-                                                    .mySubscription.status
-                                                    .toUpperCase())
-                                          ],
-                                        )),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                            SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                        ),
-                )),
+                                        Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(10, 0, 10, 5),
+                                          color: theme.getState() == false
+                                              ? Colors.white
+                                              : Colors.grey.shade800,
+                                          height: 200,
+                                          child: Center(
+                                              child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              Text(
+                                                'Type: ' +
+                                                    widget
+                                                        ._currentUser
+                                                        .mySubscription
+                                                        .transactionText,
+                                                style: TextStyle(
+                                                    color: theme.getState()
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                              ),
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              Text(
+                                                'Betalt: ' +
+                                                    _displayAmount(
+                                                      widget
+                                                          ._currentUser
+                                                          .mySubscription
+                                                          .amount,
+                                                    ),
+                                                style: TextStyle(
+                                                    color: theme.getState()
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                              ),
+                                              SizedBox(
+                                                height: 20,
+                                              ),
+                                              Text(
+                                                'Status: ' +
+                                                    widget._currentUser
+                                                        .mySubscription.status
+                                                        .toUpperCase(),
+                                                style: TextStyle(
+                                                    color: theme.getState()
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                              )
+                                            ],
+                                          )),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
+                  )),
+            ),
           ),
         ),
       ),

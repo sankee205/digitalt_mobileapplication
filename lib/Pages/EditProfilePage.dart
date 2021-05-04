@@ -183,7 +183,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       height: 40,
                     ),
                     Text(
-                      'Telefon nummer',
+                      'Mobilnummer',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                     ),
@@ -222,7 +222,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             _showAlertPublishDialog(context);
                           }
                         },
-                        child: Text('Submit'),
+                        child: Text('Lagre Endringer'),
                         color: Colors.green,
                       ),
                     ),

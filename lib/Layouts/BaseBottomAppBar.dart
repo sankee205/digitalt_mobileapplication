@@ -34,15 +34,15 @@ class _BaseBottomAppBarState extends State<BaseBottomAppBar> {
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Hjem',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.storage),
-          label: 'MyArticles',
+          label: 'Mine Artikler',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline_rounded),
-          label: 'Profile',
+          label: 'Min Profil',
         ),
       ],
       //selectedItemColor: Colors.red,

@@ -79,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Container(
           child: Center(
             child: Container(
-                width: 400,
+                width: 800,
                 child: Material(
                   child: _auth.isUserAnonymous()
                       ? Column(
@@ -122,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 10,
                             ),
                             Text(
-                              'Din Profildata',
+                              'Din Brukerinformasjon',
                               style: TextStyle(fontSize: 20),
                             ),
                             SizedBox(
