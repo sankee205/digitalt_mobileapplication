@@ -1,10 +1,11 @@
 class Subscription {
-  final bool freeMonthUsed;
+  bool freeMonthUsed;
   final String orderId;
   final String amount;
-  final String status;
+  String status;
   final String transactionText;
   final String timeStamp;
+  final String expiredDate;
 
   Subscription({
     this.freeMonthUsed,
@@ -13,6 +14,7 @@ class Subscription {
     this.transactionText,
     this.status,
     this.timeStamp,
+    this.expiredDate,
   });
   Subscription.fromData(Map<String, dynamic> data)
       : freeMonthUsed = data['freeMonthUsed'],
@@ -20,7 +22,8 @@ class Subscription {
         amount = data['amount'],
         transactionText = data['transactionText'],
         status = data['status'],
-        timeStamp = data['timeStamp'];
+        timeStamp = data['timeStamp'],
+        expiredDate = data['expiredDate'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,6 +33,12 @@ class Subscription {
       'status': status,
       'transactionText': transactionText,
       'timeStamp': timeStamp,
+      'expiredDate': expiredDate
     };
+  }
+
+  setFreeMonth() {
+    this.freeMonthUsed = true;
+    this.status = 'nonActive';
   }
 }

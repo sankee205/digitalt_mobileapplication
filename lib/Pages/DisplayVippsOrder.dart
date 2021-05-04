@@ -7,12 +7,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+import 'package:jiffy/jiffy.dart';
+
 /// this page will display the user profile
 class DisplayVippsOrder extends StatefulWidget {
   final dynamic jsonDetailString;
   final String uid;
+  final int type;
 
-  const DisplayVippsOrder(this.jsonDetailString, this.uid);
+  const DisplayVippsOrder(this.jsonDetailString, this.uid, this.type);
   @override
   _DisplayVippsOrderState createState() => _DisplayVippsOrderState();
 }
@@ -38,6 +41,7 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
         status: 'active',
         amount: transactionInfo['amount'].toString(),
         timeStamp: transactionInfo['timeStamp'],
+        expiredDate: _setExpiredDate(transactionInfo['timeStamp']),
         transactionText: transactionInfo['transactionText']);
     await _databaseService.updateSubscriptionData(widget.uid, mySubscription);
     setState(() {
@@ -45,6 +49,22 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
       _transactionId = transactionInfo['transactionId'].toString();
       _type = transactionInfo['transactionText'];
     });
+  }
+
+  _setExpiredDate(String timeStamp) {
+    switch (widget.type) {
+      case 1:
+        String yearSubscription =
+            Jiffy(timeStamp).add(years: 1).dateTime.toString();
+        return yearSubscription;
+        break;
+      case 2:
+        String monthSubscription =
+            Jiffy(timeStamp).add(months: 1).dateTime.toString();
+        return monthSubscription;
+        break;
+      default:
+    }
   }
 
   _displayAmount(String number) {
@@ -114,7 +134,7 @@ class _DisplayVippsOrderState extends State<DisplayVippsOrder> {
                       SizedBox(
                         height: 30,
                       ),
-                      Text('Din abonnement er nå:' + _type),
+                      Text('Din abonnement er nå: ' + _type),
                       SizedBox(
                         height: 30,
                       ),

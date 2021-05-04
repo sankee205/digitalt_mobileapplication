@@ -38,18 +38,16 @@ class VippsApi {
     return null;
   }
 
-  Future<String> initiatePayment(String phoneNumber, int type) async {
-    String cost;
+  Future<String> initiatePayment(
+      String phoneNumber, int type, String cost) async {
     String subscriptionType;
     if (type == 1) {
       subscriptionType = "One year subscription";
-      cost = '105000';
     }
     if (type == 2) {
       subscriptionType = "One month subscription";
-      cost = '10000';
     }
-    String randomNumber = Random().nextInt(1000).toString();
+    String randomNumber = Random().nextInt(100000).toString();
     Map requestBody = {
       "customerInfo": {"mobileNumber": "90232609"},
       "merchantInfo": {
@@ -107,13 +105,17 @@ class VippsApi {
     return response.statusCode.toString();
   }
 
-  Future capturePayment() async {
+  Future capturePayment(String cost, int type) async {
+    String subscriptionType;
+    if (type == 1) {
+      subscriptionType = "One year subscription";
+    }
+    if (type == 2) {
+      subscriptionType = "One month subscription";
+    }
     Map requestBody = {
       "merchantInfo": {"merchantSerialNumber": _merchantSerialNumber},
-      "transaction": {
-        "amount": "105000",
-        "transactionText": "One year subscription"
-      }
+      "transaction": {"amount": cost, "transactionText": subscriptionType}
     };
     http.Response response = await http.post(
         Uri.https(_base_url, "/ecomm/v2/payments/$_orderId/capture"),
@@ -125,6 +127,7 @@ class VippsApi {
           'Merchant-Serial-Number': _merchantSerialNumber
         },
         body: json.encode(requestBody));
+    print(response.body);
     if (response.statusCode == 200) {
       final body = response.body.toString();
       return body;
