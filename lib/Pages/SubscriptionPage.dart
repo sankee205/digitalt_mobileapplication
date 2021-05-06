@@ -55,7 +55,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     List resultant = await _db.getVippsPricesContent();
     if (resultant != null) {
       var result = resultant[0];
-      print(result);
       setState(() {
         _month = result['oneMonth'];
         _year = result['oneYear'];
@@ -75,7 +74,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
   _initiateVipps(String cost) async {
     if (_isAppInstalled) {
       await _vippsApi
-          .initiatePayment('93249909', _type, cost)
+          .initiatePayment(widget._currentUser.phonenumber, _type, cost)
           .then((value) async {
         await LaunchApp.openApp(
             androidPackageName: 'vipps.   vipps',

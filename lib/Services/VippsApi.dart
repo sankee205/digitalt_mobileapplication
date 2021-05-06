@@ -11,6 +11,7 @@ class VippsApi {
   static const String _client_secret = "6-lnEIve7NKxxbzGiYjgfMN-3WA=";
   static const String _merchantSerialNumber = "218468";
   static const String _sub_key = "5c194972d7994fe284168479cd99bef1";
+  static const String _number = '90232609';
 
   String _accessToken;
   String _orderId;
@@ -49,7 +50,7 @@ class VippsApi {
     }
     String randomNumber = Random().nextInt(100000).toString();
     Map requestBody = {
-      "customerInfo": {"mobileNumber": "90232609"},
+      "customerInfo": {"mobileNumber": _number},
       "merchantInfo": {
         "merchantSerialNumber": _merchantSerialNumber,
         "callbackPrefix":

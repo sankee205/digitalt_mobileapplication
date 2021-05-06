@@ -144,7 +144,7 @@ class _BaseAppDrawerState extends State<BaseAppDrawer> {
           _auth.isUserAnonymous()
               ? SizedBox()
               : ListTile(
-                  leading: Icon(Icons.settings),
+                  leading: Icon(Icons.subscriptions),
                   title: Text('Abonnement'),
                   onTap: () {
                     Navigator.push(
