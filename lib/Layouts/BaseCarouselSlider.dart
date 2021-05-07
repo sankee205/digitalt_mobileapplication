@@ -1,7 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:digitalt_application/Pages/ProfilePage.dart';
 import 'package:digitalt_application/Pages/SingleCasePage.dart';
+import 'package:digitalt_application/Pages/SubscriptionPage.dart';
 import 'package:digitalt_application/Services/DataBaseService.dart';
 import 'package:digitalt_application/Services/auth.dart';
+import 'package:digitalt_application/models/user.dart';
 import 'package:flutter/material.dart';
 
 import 'BaseCaseBox.dart';
@@ -21,6 +24,7 @@ class BaseCarouselSlider extends StatefulWidget {
 }
 
 class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
+  BaseUser _currentUser;
   String _currentUserRole;
   final AuthService _authService = AuthService();
   final DatabaseService _db = DatabaseService();
@@ -29,6 +33,14 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
   _getUserRole() async {
     dynamic firebaseUserRole = await _authService.getUserRole();
     if (firebaseUserRole != null) {
+      if (firebaseUserRole != 'Guest') {
+        dynamic user = await _authService.getFirebaseUser();
+        if (user != null) {
+          setState(() {
+            _currentUser = user;
+          });
+        }
+      }
       setState(() {
         _currentUserRole = firebaseUserRole;
       });
@@ -80,44 +92,23 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
               onTap: () {
                 switch (_currentUserRole) {
                   case 'Admin':
-                    {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CasePage(
-                                    image: caseObject['image'],
-                                    title: caseObject['title'],
-                                    author: caseObject['author'],
-                                    publishedDate: caseObject['publishedDate'],
-                                    introduction: caseObject['introduction'],
-                                    text: caseObject['text'],
-                                    lastEdited: caseObject['lastEdited'],
-                                    searchBar: false,
-                                  )));
-                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CasePage(
+                                  image: caseObject['image'],
+                                  title: caseObject['title'],
+                                  author: caseObject['author'],
+                                  publishedDate: caseObject['publishedDate'],
+                                  introduction: caseObject['introduction'],
+                                  text: caseObject['text'],
+                                  lastEdited: caseObject['lastEdited'],
+                                  searchBar: false,
+                                )));
+
                     break;
                   case 'User':
-                    {
-                      if (_guestList.contains(caseObject['title'])) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CasePage(
-                                      image: caseObject['image'],
-                                      title: caseObject['title'],
-                                      author: caseObject['author'],
-                                      publishedDate:
-                                          caseObject['publishedDate'],
-                                      introduction: caseObject['introduction'],
-                                      text: caseObject['text'],
-                                      lastEdited: caseObject['lastEdited'],
-                                      searchBar: false,
-                                    )));
-                      }
-                    }
-                    break;
-                  case 'Subscriber':
-                    {
+                    if (_guestList.contains(caseObject['title'])) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -131,26 +122,51 @@ class _BaseCarouselSliderState extends State<BaseCarouselSlider> {
                                     lastEdited: caseObject['lastEdited'],
                                     searchBar: false,
                                   )));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SubscriptionPage(_currentUser)));
                     }
+
+                    break;
+                  case 'Subscriber':
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CasePage(
+                                  image: caseObject['image'],
+                                  title: caseObject['title'],
+                                  author: caseObject['author'],
+                                  publishedDate: caseObject['publishedDate'],
+                                  introduction: caseObject['introduction'],
+                                  text: caseObject['text'],
+                                  lastEdited: caseObject['lastEdited'],
+                                  searchBar: false,
+                                )));
+
                     break;
                   case 'Guest':
-                    {
-                      if (_guestList.contains(caseObject['title'])) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CasePage(
-                                      image: caseObject['image'],
-                                      title: caseObject['title'],
-                                      author: caseObject['author'],
-                                      publishedDate:
-                                          caseObject['publishedDate'],
-                                      introduction: caseObject['introduction'],
-                                      text: caseObject['text'],
-                                      lastEdited: caseObject['lastEdited'],
-                                      searchBar: false,
-                                    )));
-                      }
+                    if (_guestList.contains(caseObject['title'])) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CasePage(
+                                    image: caseObject['image'],
+                                    title: caseObject['title'],
+                                    author: caseObject['author'],
+                                    publishedDate: caseObject['publishedDate'],
+                                    introduction: caseObject['introduction'],
+                                    text: caseObject['text'],
+                                    lastEdited: caseObject['lastEdited'],
+                                    searchBar: false,
+                                  )));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()));
                     }
                     break;
                 }
