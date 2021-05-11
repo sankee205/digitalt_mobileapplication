@@ -5,7 +5,6 @@ import 'package:digitalt_application/Pages/HomePage.dart';
 import 'package:digitalt_application/Services/auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 
 class LoginView extends StatefulWidget {
@@ -64,7 +63,7 @@ class _LoginViewState extends State<LoginView> {
                             Text(
                               'Logg inn her for å se alt av innhold hos DIGI-TALT.NO',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.openSans(
+                              style: TextStyle(
                                   //color: Colors.black,
                                   fontSize: 28),
                             ),
@@ -72,7 +71,7 @@ class _LoginViewState extends State<LoginView> {
                             Text(
                               'Skriv inn e-post og passord her for å lese saker hos DIGI-TALT.NO',
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.openSans(
+                              style: TextStyle(
                                   //color: Colors.black,
                                   fontSize: 14),
                             ),
@@ -165,7 +164,7 @@ class _LoginViewState extends State<LoginView> {
       children: <Widget>[
         Text('DIGI-TALT',
             textAlign: TextAlign.center,
-            style: GoogleFonts.openSans(
+            style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold)),

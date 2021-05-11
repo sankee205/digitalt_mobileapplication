@@ -178,13 +178,22 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Velg Abonnement Og Betal Med ',
-                                      style: TextStyle(fontSize: 20),
+                                      'VELG ABONNEMENT OG BETAL MED ',
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width <
+                                                  700
+                                              ? 15
+                                              : 30),
                                     ),
                                     Image(
                                       image: AssetImage(
                                           'assets/vipps/vippsLogo.png'),
-                                      width: 80,
+                                      width: MediaQuery.of(context).size.width <
+                                              700
+                                          ? 50
+                                          : 100,
                                     ),
                                   ],
                                 ),
@@ -228,7 +237,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                 height: 75,
                                                 child: Center(
                                                   child: Text(
-                                                    'ET ÅR',
+                                                    '1 ÅR',
                                                     style: TextStyle(
                                                         fontSize: 25,
                                                         color: theme.getState()
@@ -329,7 +338,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                 height: 75,
                                                 child: Center(
                                                   child: Text(
-                                                    'PRØV EN MÅNED',
+                                                    'PRØV 1 MÅNED',
                                                     style: TextStyle(
                                                         fontSize: 25,
                                                         color: theme.getState()
