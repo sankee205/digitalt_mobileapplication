@@ -133,8 +133,9 @@ class _SignUpViewState extends State<SignUpView> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              UserTermsPage()));
+                                          builder: (context) => UserTermsPage(
+                                                register: true,
+                                              )));
                                 },
                               ),
                             )

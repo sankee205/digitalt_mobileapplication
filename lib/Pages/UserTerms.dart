@@ -12,6 +12,9 @@ import 'package:provider/provider.dart';
  * here you can change the theme to dark or light mode
  */
 class UserTermsPage extends StatefulWidget {
+  final bool register;
+
+  const UserTermsPage({Key key, @required this.register}) : super(key: key);
   @override
   _UserTermsPageState createState() => _UserTermsPageState();
 }
@@ -61,7 +64,7 @@ class _UserTermsPageState extends State<UserTermsPage> {
                   ),
                 ],
               ),
-              bottomNavigationBar: BaseBottomAppBar(),
+              bottomNavigationBar: widget.register ? null : BaseBottomAppBar(),
               floatingActionButton: FloatingActionButton(
                 child: Icon(
                   Icons.arrow_back,
@@ -74,7 +77,7 @@ class _UserTermsPageState extends State<UserTermsPage> {
               ),
 
               //creates the menu in the appbar(drawer)
-              drawer: BaseAppDrawer(),
+              drawer: widget.register ? null : BaseAppBar(),
 
               //here comes the body of the home page
               body: SingleChildScrollView(

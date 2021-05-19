@@ -104,7 +104,9 @@ class _SettingsState extends State<SettingsPage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => UserTermsPage()));
+                                      builder: (context) => UserTermsPage(
+                                            register: false,
+                                          )));
                             },
                           ),
                         ],
