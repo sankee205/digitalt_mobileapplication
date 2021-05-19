@@ -26,6 +26,10 @@ class DatabaseService {
     return await _userCollection.doc(id).update({'myCases': myCases});
   }
 
+  Future deleteUser(String id) async {
+    return await _userCollection.doc(id).delete();
+  }
+
   Future setUserRole(String id, String role) async {
     if (role != 'Admin') {
       return await _userCollection.doc(id).update({'userRole': role});
@@ -218,6 +222,30 @@ class DatabaseService {
               })
             });
     return guestList;
+  }
+  //--------------------------Terms methods--------------------------------------
+
+  Future getGdprContent() async {
+    List infoList = [];
+    await FirebaseFirestore.instance.collection('GDPR').get().then((value) => {
+          value.docs.forEach((element) {
+            infoList.add(element);
+          })
+        });
+    return infoList;
+  }
+
+  Future getUserTermsContent() async {
+    List infoList = [];
+    await FirebaseFirestore.instance
+        .collection('UserTerms')
+        .get()
+        .then((value) => {
+              value.docs.forEach((element) {
+                infoList.add(element);
+              })
+            });
+    return infoList;
   }
 
   //-------------------------------Image methods--------------------------------

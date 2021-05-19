@@ -28,6 +28,15 @@ class AuthService {
     return _auth.currentUser.uid;
   }
 
+  deleteUser() async {
+    User user = _auth.currentUser;
+    if (user != null) {
+      await user.delete();
+    } else {
+      print('user is null');
+    }
+  }
+
   getSubscriptionStatus() async {
     if (await getUserRole() == 'Subscriber') {
       final now = DateTime.now();

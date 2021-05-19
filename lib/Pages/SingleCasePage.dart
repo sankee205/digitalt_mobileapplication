@@ -101,7 +101,7 @@ class _CasePageState extends State<CasePage> {
   @override
   Widget build(BuildContext context) {
     if (widget.lastEdited != null) {
-      _lastEditedText = Text('Sist edret: ' + widget.lastEdited);
+      _lastEditedText = Text('Sist endret: ' + widget.lastEdited);
     }
     return Scaffold(
       //this is the appbar for the home page

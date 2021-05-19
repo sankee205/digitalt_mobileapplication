@@ -212,11 +212,6 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - AppAuth (1.4.0):
-    - AppAuth/Core (= 1.4.0)
-    - AppAuth/ExternalUserAgent (= 1.4.0)
-  - AppAuth/Core (1.4.0)
-  - AppAuth/ExternalUserAgent (1.4.0)
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -304,9 +299,6 @@ PODS:
     - FirebaseCore (~> 7.0)
     - GTMSessionFetcher/Core (~> 1.4)
   - Flutter (1.0.0)
-  - google_sign_in (0.0.1):
-    - Flutter
-    - GoogleSignIn (~> 5.0)
   - GoogleAppMeasurement (7.3.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
     - GoogleUtilities/MethodSwizzler (~> 7.0)
@@ -315,10 +307,6 @@ PODS:
     - nanopb (~> 2.30906.0)
   - GoogleDataTransport (8.1.0):
     - nanopb (~> 2.30906.0)
-  - GoogleSignIn (5.0.2):
-    - AppAuth (~> 1.2)
-    - GTMAppAuth (~> 1.0)
-    - GTMSessionFetcher/Core (~> 1.1)
   - GoogleUtilities/AppDelegateSwizzler (7.3.1):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -362,28 +350,17 @@ PODS:
     - BoringSSL-GRPC (= 0.0.7)
     - gRPC-Core/Interface (= 1.28.2)
   - gRPC-Core/Interface (1.28.2)
-  - GTMAppAuth (1.1.0):
-    - AppAuth/Core (~> 1.4)
-    - GTMSessionFetcher (~> 1.4)
-  - GTMSessionFetcher (1.5.0):
-    - GTMSessionFetcher/Full (= 1.5.0)
   - GTMSessionFetcher/Core (1.5.0)
-  - GTMSessionFetcher/Full (1.5.0):
-    - GTMSessionFetcher/Core (= 1.5.0)
   - leveldb-library (1.22.1)
   - nanopb (2.30906.0):
     - nanopb/decode (= 2.30906.0)
     - nanopb/encode (= 2.30906.0)
   - nanopb/decode (2.30906.0)
   - nanopb/encode (2.30906.0)
-  - path_provider (0.0.1):
-    - Flutter
   - PromisesObjC (1.2.12)
   - shared_preferences (0.0.1):
     - Flutter
   - url_launcher (0.0.1):
-    - Flutter
-  - webview_flutter (0.0.1):
     - Flutter
 
 DEPENDENCIES:
@@ -394,16 +371,12 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
-  - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
   trunk:
     - abseil
-    - AppAuth
     - BoringSSL-GRPC
     - Firebase
     - FirebaseAnalytics
@@ -415,11 +388,9 @@ SPEC REPOS:
     - FirebaseStorage
     - GoogleAppMeasurement
     - GoogleDataTransport
-    - GoogleSignIn
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
-    - GTMAppAuth
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
@@ -440,20 +411,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
-  google_sign_in:
-    :path: ".symlinks/plugins/google_sign_in/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
-  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 1546509577a699bf43c504dd88002753be2f4187
   external_app_launcher: ad55ac844aa21f2d2197d7cec58ff0d0dc40bbc0
@@ -470,22 +434,17 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 5e777e6640fa060405cc7632447b6c5ca5af4742
   FirebaseStorage: 5002b1895bfe74a5ce92ad54f966e6162d0da2e5
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc
   GoogleAppMeasurement: 8d3c0aeede16ab7764144b5a4ca8e1d4323841b7
   GoogleDataTransport: 116c84c4bdeb76be2a7a46de51244368f9794eab
-  GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: e1d9ed4e544fc32a93e00e721400cbc3f377200d
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
-  GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
 
 PODFILE CHECKSUM: a75497545d4391e2d394c3668e20cfb1c2bbd4aa
 

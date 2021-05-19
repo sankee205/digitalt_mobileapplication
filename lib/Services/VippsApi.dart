@@ -6,11 +6,14 @@ import 'package:http/http.dart' as http;
 ///
 ///this class is currently not used
 class VippsApi {
-  static const String _base_url = "apitest.vipps.no";
-  static const String _client_id = "67a9c4f8-0e21-4b89-bf94-daa6abb7b166";
-  static const String _client_secret = "6-lnEIve7NKxxbzGiYjgfMN-3WA=";
-  static const String _merchantSerialNumber = "218468";
-  static const String _sub_key = "5c194972d7994fe284168479cd99bef1";
+  static const String _base_url = "apitest.vipps.no"; //bytt disse
+  static const String _client_id =
+      "67a9c4f8-0e21-4b89-bf94-daa6abb7b166"; //bytt disse
+  static const String _client_secret =
+      "6-lnEIve7NKxxbzGiYjgfMN-3WA="; //bytt disse
+  static const String _merchantSerialNumber = "218468"; //bytt disse
+  static const String _sub_key =
+      "5c194972d7994fe284168479cd99bef1"; //bytt disse
   static const String _number = '90232609';
 
   String _accessToken;
