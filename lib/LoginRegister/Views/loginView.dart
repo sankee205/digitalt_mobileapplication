@@ -1,12 +1,16 @@
+import 'package:digitalt_application/AppManagement/ThemeManager.dart';
 import 'package:digitalt_application/LoginRegister/Model/loginViewModel.dart';
-import 'package:digitalt_application/LoginRegister/Views/signUpView.dart';
+import 'package:digitalt_application/LoginRegister/Widgets/inputField.dart';
+import 'package:digitalt_application/LoginRegister/navigationService.dart';
+import 'package:digitalt_application/LoginRegister/routeNames.dart';
 import 'package:digitalt_application/LoginRegister/uiHelpers.dart';
-import 'package:digitalt_application/Pages/HomePage.dart';
 import 'package:digitalt_application/Services/auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
+
+import '../locator.dart';
 
 class LoginView extends StatefulWidget {
   final Function toggleView;
@@ -17,7 +21,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  @override
+  final NavigationService _navigationService = locator<NavigationService>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final Color logoGreen = Color(0xff25bcbb);
@@ -31,137 +35,130 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<LoginViewModel>.reactive(
-        viewModelBuilder: () => LoginViewModel(),
-        builder: (context, model, child) => Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.red,
-              automaticallyImplyLeading: false,
-              actions: <Widget>[
-                MaterialButton(
-                    child: Text('Registrer deg'),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpView()));
-                    }),
-              ],
-            ),
-            body: Material(
-              child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Logg inn her for å se alt av innhold hos DIGI-TALT.NO',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                              //color: Colors.black,
-                              fontSize: 28),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Skriv inn e-post og passord her for å lese saker hos DIGI-TALT.NO',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.openSans(
-                              //color: Colors.black,
-                              fontSize: 14),
-                        ),
-                        verticalSpaceSmall,
-                        TextFormField(
-                          validator: (val) =>
-                              val.isEmpty ? 'Enter an email' : null,
-                          onChanged: (val) {
-                            setState(() => email = val);
-                          },
-                          //style: TextStyle(color: Colors.black),
-                        ),
-                        SizedBox(height: 20),
-                        TextFormField(
-                          obscureText: true,
-                          validator: (val) => val.length < 6
-                              ? 'Enter a password 6+ characters long'
-                              : null,
-                          onChanged: (val) {
-                            setState(() => password = val);
-                          },
-                          //style: TextStyle(color: Colors.black)
-                        ),
-                        verticalSpaceMedium,
-                        MaterialButton(
-                          elevation: 0,
-                          minWidth: 210,
-                          height: 50,
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              dynamic result = await _auth
-                                  .signInWithEmailAndPassword(email, password);
-                              if (result == null) {
-                                setState(() => error =
-                                    'Could not log in with those credentials!');
-                              } else {
-                                print('signed in');
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomePage()));
-                              }
-                            }
-                          },
-                          color: logoGreen,
-                          child:
-                              Text('Logg inn', style: TextStyle(fontSize: 16)),
-                          textColor: Colors.white,
-                        ),
-                        SizedBox(height: 10),
-                        verticalSpaceSmall,
-                        MaterialButton(
-                          child: Text('Fortsett som gjest'),
-                          onPressed: () async {
-                            dynamic result = await _auth.signInAnon();
-                            if (result == null) {
-                              print('error signing in');
-                            } else {
-                              print('signed in');
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomePage()));
-                            }
-                          },
-                        ),
-                        verticalSpaceSmall,
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 14.0),
-                        ),
-                        verticalSpaceMedium,
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: _buildFooterLogo(),
-                        )
-                      ],
+    return Consumer<ThemeNotifier>(
+      builder: (context, theme, child) => ViewModelBuilder<
+              LoginViewModel>.reactive(
+          viewModelBuilder: () => LoginViewModel(),
+          builder: (context, model, child) => Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.red,
+                automaticallyImplyLeading: false,
+                actions: <Widget>[
+                  MaterialButton(
+                      child: Text('Registrer deg'),
+                      onPressed: () {
+                        _navigationService.navigateTo(SignUpViewRoute);
+                      }),
+                ],
+              ),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: 800,
+                    child: Material(
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 50),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Logg inn her for å se alt av innhold hos DIGI-TALT.NO',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 28),
+                                ),
+                                SizedBox(height: 20),
+                                Text(
+                                  'Skriv inn e-post og passord her for å lese saker hos DIGI-TALT.NO',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                verticalSpaceMedium,
+                                InputField(
+                                    controller: emailController,
+                                    placeholder: 'Email',
+                                    textInputType: TextInputType.emailAddress,
+                                    onChanged: (val) {
+                                      setState(() => email = val);
+                                    }),
+                                verticalSpaceSmall,
+                                InputField(
+                                  controller: passwordController,
+                                  placeholder: 'Passord',
+                                  password: true,
+                                  onChanged: (val) {
+                                    setState(() => password = val);
+                                  },
+                                ),
+                                verticalSpaceMedium,
+                                MaterialButton(
+                                  elevation: 0,
+                                  minWidth: 210,
+                                  height: 50,
+                                  onPressed: () async {
+                                    if (_formKey.currentState.validate()) {
+                                      dynamic result = await _auth
+                                          .signInWithEmailAndPassword(
+                                              email, password);
+                                      if (result == null) {
+                                        setState(() => error =
+                                            'Kunne ikke logge inn. Email og/eller passord er feil!');
+                                      } else {
+                                        _navigationService
+                                            .navigateTo(HomePageRoute);
+                                      }
+                                    }
+                                  },
+                                  color: theme.state ? Colors.red : logoGreen,
+                                  child: Text('Logg inn',
+                                      style: TextStyle(fontSize: 16)),
+                                  textColor: Colors.white,
+                                ),
+                                SizedBox(height: 20),
+                                verticalSpaceSmall,
+                                MaterialButton(
+                                  child: Text('Fortsett som gjest'),
+                                  onPressed: () async {
+                                    dynamic result = await _auth.signInAnon();
+                                    if (result == null) {
+                                    } else {
+                                      _navigationService
+                                          .navigateTo(HomePageRoute);
+                                    }
+                                  },
+                                ),
+                                verticalSpaceSmall,
+                                Text(
+                                  error,
+                                  style: TextStyle(
+                                      color: Colors.red, fontSize: 14.0),
+                                ),
+                                verticalSpaceMedium,
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: _buildFooterLogo(),
+                                )
+                              ],
+                            ),
+                          )),
                     ),
-                  )),
-            )));
+                  ),
+                ),
+              ))),
+    );
   }
 
   _buildFooterLogo() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('DIGI-TALT',
+        Text('DIGI-TALT.NO',
             textAlign: TextAlign.center,
-            style: GoogleFonts.openSans(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       ],
     );
   }

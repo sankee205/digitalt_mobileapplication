@@ -5,7 +5,7 @@ import 'package:digitalt_application/Services/DataBaseService.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
-/**
+/*
  * this is the infopage. it consists of information about digi-talt.no and
  * contact inofrmation
  */
@@ -73,7 +73,7 @@ class _InfoPageState extends State<InfoPage> {
           unselectedLabelColor: Colors.grey,
           tabs: <Widget>[
             Tab(
-              child: Text('Om DIGI-TALT.NO'),
+              child: Text('Om Digi-talt'),
             ),
             Tab(
               child: Text('Kontakt oss'),
@@ -84,10 +84,11 @@ class _InfoPageState extends State<InfoPage> {
         //creates the menu in the appbar(drawer)
         drawer: BaseAppDrawer(),
         body: Container(
-          /*decoration: BoxDecoration(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
+          decoration: BoxDecoration(
             image: DecorationImage(
                 image: NetworkImage(widget.backgroundPhoto), fit: BoxFit.cover),
-          ),*/
+          ),
           child: TabBarView(
             children: [
               Container(

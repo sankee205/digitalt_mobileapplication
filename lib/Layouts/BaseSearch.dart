@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class BaseSearch extends SearchDelegate {
   final List<String> allCases;
   final List allCaseList;
-  BaseSearch({@required this.allCases, @required this.allCaseList});
+  BaseSearch({this.allCases, this.allCaseList});
 
   ThemeData appBarTheme(BuildContext context) {
     assert(context != null);
@@ -35,6 +35,15 @@ class BaseSearch extends SearchDelegate {
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
+      Center(
+          child: Text(
+        'Tøm',
+        style: TextStyle(
+            color: Theme.of(context).colorScheme.brightness == Brightness.dark
+                ? Colors.red
+                : Colors.white,
+            fontSize: 17),
+      )),
       IconButton(
           onPressed: () {
             query = "";
@@ -86,7 +95,6 @@ class BaseSearch extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    print(allCases);
     List<String> suggestionList = [];
     query.isEmpty
         ? suggestionList = allCases

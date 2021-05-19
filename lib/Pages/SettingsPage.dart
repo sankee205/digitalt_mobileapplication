@@ -2,6 +2,8 @@ import 'package:digitalt_application/AppManagement/ThemeManager.dart';
 import 'package:digitalt_application/Layouts/BaseAppBar.dart';
 import 'package:digitalt_application/Layouts/BaseAppDrawer.dart';
 import 'package:digitalt_application/Layouts/BaseBottomAppBar.dart';
+import 'package:digitalt_application/Pages/PrivacyPolicyPage.dart';
+import 'package:digitalt_application/Pages/UserTerms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +57,9 @@ class _SettingsState extends State<SettingsPage> {
                     child: Material(
                       child: Column(
                         children: [
+                          SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -76,7 +81,34 @@ class _SettingsState extends State<SettingsPage> {
                                 },
                               ),
                             ],
-                          )
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          MaterialButton(
+                            child: Text('Les Bruksvilkår'),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PrivacyPolicyPage()));
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          MaterialButton(
+                            child: Text('Les Personvernerklæring'),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UserTermsPage(
+                                            register: false,
+                                          )));
+                            },
+                          ),
                         ],
                       ),
                     )),
